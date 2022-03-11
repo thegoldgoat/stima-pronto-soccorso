@@ -1,4 +1,4 @@
-from generator import Generator
+from src.simulator.generators import Generator
 
 class ExponentialGenerator(Generator):
 
