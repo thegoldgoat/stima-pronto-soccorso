@@ -1,13 +1,17 @@
-from threading import Thread
+from typing import List
+import queue
 
-class Simulator(Thread):
+from src.common.patient_simulator import PatientSimulator
 
-    def __init__(self):
-        Thread.__init__(self)
-        
-    def run(self):
+class Simulator():
+    def __init__(self, priority_queues: List[queue.PriorityQueue], therapy_state: List[PatientSimulator]):
+
+        self._priority_queues = priority_queues
+        self._therapy_state = therapy_state
+
+    def simulate(self):
         pass
 
-    def iteration(self):
+    def _iteration(self):
         pass
 

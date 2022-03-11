@@ -6,10 +6,10 @@ class PatientSimulator():
         # self.therapy_generator = patient.therapy_generator
         # self.leave_generator = patient.leave_generator
 
-        self._therapy_time = self.therapy_generator.generate_sample()
-        self._leave_time = self.leave_generator.generate_sample()
+        self._therapy_time = patient.therapy_generator.generate_sample()
+        self._leave_time = patient.leave_generator.generate_sample()
 
-        self.emergency_code = patient.emergency_code
+        # self.emergency_code = patient.emergency_code
         self.arrival_time = patient.arrival_time
 
     def update_therapy_time_and_check_if_finish(self, amount_passed):
