@@ -1,15 +1,34 @@
-from asyncio import futures
 from concurrent.futures import ThreadPoolExecutor, wait
-from common.patient import Patient
-from simulator.generators.gauss_generator import GaussGenerator
-from simulator.generators.exponential_generator import ExponentialGenerator
-from src.simulator.simulator import Simulator
 from queue import PriorityQueue
+
+from generators.gauss_generator import GaussGenerator
+from generators.exponential_generator import ExponentialGenerator
+from simulator import Simulator
+
+from src.common.patient import Patient
+from src.common.patient_simulator import PatientSimulator
 
 
 def run_single_simulation(priority_queues):
-    # TODO Instantiate deep copy with PatientSimulator instead of Patient
-    pass
+    # Instantiate deep copy with PatientSimulator instead of Patient
+
+    # Meaning of the next line
+    # priority_queues_copy = [
+    #     map(lambda input_patient: PatientSimulator(input_patient),
+    #         initial_queue) for initial_queue in priority_queues
+    # ]
+
+    priority_queues_copy = map(
+        lambda initial_queue:
+            map(lambda input_patient: PatientSimulator(
+                input_patient), initial_queue),
+        priority_queues
+    )
+
+    print('Initial')
+    print(priority_queues)
+    print('Copy')
+    print(priority_queues_copy)
 
 
 CODE_RED = 0
@@ -32,19 +51,19 @@ def main():
 
     yellow_queue = PriorityQueue()
     yellow_queue.add(Patient(GaussGenerator(
-        2, 2), ExponentialGenerator(2), CODE_RED, 0))
+        2, 2), ExponentialGenerator(2), CODE_YELLOW, 0))
     yellow_queue.add(Patient(GaussGenerator(
-        3, 1), ExponentialGenerator(3), CODE_RED, 0))
+        3, 1), ExponentialGenerator(3), CODE_YELLOW, 0))
     yellow_queue.add(Patient(GaussGenerator(
-        4, 5), ExponentialGenerator(1), CODE_RED, 0))
+        4, 5), ExponentialGenerator(1), CODE_YELLOW, 0))
 
     green_queue = PriorityQueue()
     green_queue.add(Patient(GaussGenerator(2, 2),
-                    ExponentialGenerator(2), CODE_RED, 0))
+                    ExponentialGenerator(2), CODE_GREEN, 0))
     green_queue.add(Patient(GaussGenerator(3, 1),
-                    ExponentialGenerator(3), CODE_RED, 0))
+                    ExponentialGenerator(3), CODE_GREEN, 0))
     green_queue.add(Patient(GaussGenerator(4, 5),
-                    ExponentialGenerator(1), CODE_RED, 0))
+                    ExponentialGenerator(1), CODE_GREEN, 0))
 
     priority_queues = [
         red_queue, yellow_queue, green_queue

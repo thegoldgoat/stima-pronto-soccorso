@@ -1,7 +1,8 @@
 from src.common.patient import Patient
 
+
 class PatientSimulator():
-    
+
     def __init__(self, patient: Patient):
         # self.therapy_generator = patient.therapy_generator
         # self.leave_generator = patient.leave_generator

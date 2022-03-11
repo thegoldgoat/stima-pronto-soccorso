@@ -3,6 +3,7 @@ import queue
 
 from src.common.patient_simulator import PatientSimulator
 
+
 class Simulator():
     def __init__(self, priority_queues: List[queue.PriorityQueue], therapy_state: List[PatientSimulator]):
 
@@ -14,4 +15,3 @@ class Simulator():
 
     def _iteration(self):
         pass
-
