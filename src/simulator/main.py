@@ -1,9 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor, wait
 from queue import PriorityQueue
 
-from generators.gauss_generator import GaussGenerator
-from generators.exponential_generator import ExponentialGenerator
-from simulator import Simulator
+from .generators.gauss_generator import GaussGenerator
+from .generators.exponential_generator import ExponentialGenerator
+from .simulator import Simulator
 
 from src.common.patient import Patient
 from src.common.patient_simulator import PatientSimulator

@@ -1,6 +1,4 @@
-from simulator.generators.generator import Generator
-
-from generator import Generator
+from .generator import Generator
 
 
 class GaussGenerator(Generator):
