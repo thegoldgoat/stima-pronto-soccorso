@@ -8,5 +8,5 @@ class Generator():
         pass
 
     @abstractmethod
-    def generate_sample():
+    def generate_sample(self):
         pass

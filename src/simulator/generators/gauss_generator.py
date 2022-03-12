@@ -7,6 +7,6 @@ class GaussGenerator(Generator):
         self.average = average
         self.variance = variance
 
-    def generate_sample():
+    def generate_sample(self):
         # TODO: to implement
-        pass
+        return 12345
