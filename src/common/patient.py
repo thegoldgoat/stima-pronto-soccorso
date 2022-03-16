@@ -8,6 +8,8 @@ class Patient():
         self.leave_generator = leave_generator
         self.emergency_code = emergency_code
         self.arrival_time = arrival_time
+        self.leave_time = None
+        self.therapy_time = None
 
     def generate_leave(self):
         self.leave_time = self.leave_generator.generate_sample()

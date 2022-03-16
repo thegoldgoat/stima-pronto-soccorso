@@ -1,4 +1,4 @@
-from common.patient import Patient
+from src.common.patient import Patient
 
 class TherapyPatient():
 
@@ -17,6 +17,12 @@ class TherapyPatient():
     def generate_therapy(self):
         """ Generate the therapy time using the therapy generator """
         self.therapy_time = self.therapy_generator.generate_sample()
+
+    def __lt__(self, nxt):
+        if self.therapy_time < nxt.therapy_time:
+            return True
+        else:
+            return False
 
     @staticmethod
     def init_with_patient(patient: Patient):
