@@ -3,6 +3,9 @@ from queue import PriorityQueue
 
 from pyrsistent import v
 
+from common.Queue.therapy_queue import TherapyQueue
+from common.therapyPatient import TherapyPatient
+
 from .generators.gauss_generator import GaussGenerator
 from .generators.exponential_generator import ExponentialGenerator
 from .simulator import Simulator
@@ -78,6 +81,11 @@ def main():
     id+=1
     waiting_queues.push(Patient(id, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_GREEN, 0))
+
+    therapyQueue = TherapyQueue()
+    # Add the patient currently in therapyQueue
+    id+=1
+    therapyQueue.push(TherapyPatient(id,GaussGenerator(4,5)))
 
     with ThreadPoolExecutor() as executor:
 
