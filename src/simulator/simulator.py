@@ -1,7 +1,6 @@
 from typing import List
 import queue
-from common.Queue.therapy_queue import TherapyQueue
-
+from src.common.Queue.therapy_queue import TherapyQueue
 from src.common.patient import Patient
 
 

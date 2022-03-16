@@ -2,7 +2,8 @@ from src.common.patient import Patient
 
 class TherapyPatient():
 
-    def __init__(self, therapy_generator, therapy_time = None):
+    def __init__(self,id, therapy_generator, therapy_time = None):
+        self.id = id
         self.therapy_generator = therapy_generator
 
         # If therapy time has been generated before I save it
@@ -27,4 +28,4 @@ class TherapyPatient():
     @staticmethod
     def init_with_patient(patient: Patient):
         """ Get a new TherapyPatient using Patient data """
-        return TherapyPatient(patient.therapy_generator,patient.therapy_time)
+        return TherapyPatient(patient.id,patient.therapy_generator,patient.therapy_time)

@@ -46,28 +46,37 @@ N = 1
 
 def main():
     print("Hello simulator!")
+    id = 0
 
     waiting_queues = WaitingQueue(CODE_COUNT)
 
-    waiting_queues.push(Patient(GaussGenerator(2, 2),
+    waiting_queues.push(Patient(id, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_RED, 0))
-    waiting_queues.push(Patient(GaussGenerator(3, 1),
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_RED, 0))
-    waiting_queues.push(Patient(GaussGenerator(4, 5),
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_RED, 0))
 
-    waiting_queues.push(Patient(GaussGenerator(
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(
         2, 2), ExponentialGenerator(2), CODE_YELLOW, 0))
-    waiting_queues.push(Patient(GaussGenerator(
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(
         3, 1), ExponentialGenerator(3), CODE_YELLOW, 0))
-    waiting_queues.push(Patient(GaussGenerator(
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(
         4, 5), ExponentialGenerator(1), CODE_YELLOW, 0))
 
-    waiting_queues.push(Patient(GaussGenerator(2, 2),
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_GREEN, 0))
-    waiting_queues.push(Patient(GaussGenerator(3, 1),
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_GREEN, 0))
-    waiting_queues.push(Patient(GaussGenerator(4, 5),
+    id+=1
+    waiting_queues.push(Patient(id, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_GREEN, 0))
 
     with ThreadPoolExecutor() as executor:
