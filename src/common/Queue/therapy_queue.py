@@ -1,4 +1,4 @@
-from src.common.therapyPatient import TherapyPatient
+from src.common.therapy_patient import TherapyPatient
 from .my_priority_queue import MyPriorityQueue
 
 

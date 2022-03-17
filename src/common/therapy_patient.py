@@ -8,7 +8,7 @@ class TherapyPatient(Patient):
 
         # If I received only the therapy_generator I generate instantly the therapy_time
         # The therapy time is generated instantly because the queue will order itself by TherapyPatient.therapy_time
-        if self.therapy_time is None:
+        if therapy_time is None:
             self.generate_therapy()
         else:
             self.therapy_time = therapy_time

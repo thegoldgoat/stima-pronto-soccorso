@@ -1,17 +1,15 @@
-from typing import List
-import queue
+from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Queue.therapy_queue import TherapyQueue
-from src.common.patient import Patient
 
 
 class Simulator():
-    def __init__(self, priority_queues: List[queue.PriorityQueue], therapy_state: TherapyQueue):
+    def __init__(self, waiting_queues: WaitingQueue, therapy_state: TherapyQueue):
 
-        self._priority_queues = priority_queues
+        self._waiting_queues = waiting_queues
         self._therapy_state = therapy_state
 
     def simulate(self):
-        pass
+        print("Starting simulation!")
 
     def _iteration(self):
         pass
