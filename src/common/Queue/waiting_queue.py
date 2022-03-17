@@ -12,6 +12,14 @@ class WaitingQueue():
         # Add new patient to the corresponding queue
         self.priority_queues[priority_code].push(new_patient)
 
+    def get_patients_count(self):
+        count = 0
+
+        for queue in self.priority_queues:
+            count += len(queue.heap)
+
+        return count
+
     def create_copy_and_generate(self):
         # create a deep copy, generate variabili aleatorie and return
         return_value = WaitingQueue(0)
