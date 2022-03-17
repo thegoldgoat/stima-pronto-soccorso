@@ -3,11 +3,14 @@ from src.simulator.generators.generator import Generator
 
 class Patient():
 
-    def __init__(self, therapy_generator: Generator, leave_generator: Generator, emergency_code, arrival_time):
+    def __init__(self, id, therapy_generator: Generator, leave_generator: Generator, emergency_code, arrival_time):
+        self.id = id
         self.therapy_generator = therapy_generator
         self.leave_generator = leave_generator
         self.emergency_code = emergency_code
         self.arrival_time = arrival_time
+        self.leave_time = None
+        self.therapy_time = None
 
     def generate_leave(self):
         self.leave_time = self.leave_generator.generate_sample()
@@ -29,7 +32,7 @@ class Patient():
             return self.arrival_time < nxt.arrival_time
 
     def clone_and_generate(self):
-        return_value = Patient(self.therapy_generator, self.leave_generator,
+        return_value = Patient(self.id, self.therapy_generator, self.leave_generator,
                                self.emergency_code, self.arrival_time
                                )
 

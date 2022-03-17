@@ -8,8 +8,11 @@ class MyPriorityQueue:
     '''
 
     # Create a heap with the array given (**must** be heapified)
-    def __init__(self, heap=[]):
-        self.heap = heap
+    def __init__(self, heap=None):
+        if heap is None:
+            self.heap = []
+        else:
+            self.heap = heap
 
     def push(self, new_item):
         heapq.heappush(self.heap, new_item)

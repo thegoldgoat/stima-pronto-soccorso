@@ -1,7 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor, wait
-from queue import PriorityQueue
+from typing import List
 
-from pyrsistent import v
+from src.common.therapy_patient import TherapyPatient
+
+from src.common.Queue.therapy_queue import TherapyQueue
 
 from .generators.gauss_generator import GaussGenerator
 from .generators.exponential_generator import ExponentialGenerator
@@ -12,28 +14,21 @@ from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
 
 
-def run_single_simulation(waiting_queues: WaitingQueue):
+def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: List[Patient]):
     waiting_queues_copy = waiting_queues.create_copy_and_generate()
 
-    print('Initial')
-    print(waiting_queues.priority_queues[0].get_min().arrival_time)
+    therapy_queue = TherapyQueue()
 
-    waiting_queues_copy.priority_queues[0].heap[0].arrival_time = '123'
+    for therapy_patient in therapy_patients_list:
+        therapy_queue.push(TherapyPatient(therapy_patient.id,
+                                          therapy_patient.therapy_generator
+                                          ))
 
-    print('After assignment')
-    print(waiting_queues.priority_queues[0].get_min().arrival_time)
+    simulator = Simulator(waiting_queues_copy, therapy_queue)
 
-    print('After assignment, on the copy')
-    print(waiting_queues_copy.priority_queues[0].get_min().arrival_time)
+    result = simulator.simulate()
 
-    print('Generated therapy time on the source (should not be found)')
-    try:
-        print(waiting_queues.priority_queues[0].get_min().therapy_time)
-    except:
-        print('OK, not found.')
-
-    print('Generated therapy time on the copy (should be 12345)')
-    print(waiting_queues_copy.priority_queues[0].get_min().therapy_time)
+    print("Result is {}".format(result))
 
 
 CODE_RED = 0
@@ -49,31 +44,43 @@ def main():
 
     waiting_queues = WaitingQueue(CODE_COUNT)
 
-    waiting_queues.push(Patient(GaussGenerator(2, 2),
+    waiting_queues.push(Patient(0, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_RED, 0))
-    waiting_queues.push(Patient(GaussGenerator(3, 1),
+
+    waiting_queues.push(Patient(1, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_RED, 0))
-    waiting_queues.push(Patient(GaussGenerator(4, 5),
+
+    waiting_queues.push(Patient(2, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_RED, 0))
 
-    waiting_queues.push(Patient(GaussGenerator(
+    waiting_queues.push(Patient(3, GaussGenerator(
         2, 2), ExponentialGenerator(2), CODE_YELLOW, 0))
-    waiting_queues.push(Patient(GaussGenerator(
+
+    waiting_queues.push(Patient(4, GaussGenerator(
         3, 1), ExponentialGenerator(3), CODE_YELLOW, 0))
-    waiting_queues.push(Patient(GaussGenerator(
+
+    waiting_queues.push(Patient(5, GaussGenerator(
         4, 5), ExponentialGenerator(1), CODE_YELLOW, 0))
 
-    waiting_queues.push(Patient(GaussGenerator(2, 2),
+    waiting_queues.push(Patient(6, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_GREEN, 0))
-    waiting_queues.push(Patient(GaussGenerator(3, 1),
+
+    waiting_queues.push(Patient(7, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_GREEN, 0))
-    waiting_queues.push(Patient(GaussGenerator(4, 5),
+
+    waiting_queues.push(Patient(8, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_GREEN, 0))
+
+    therapy_patients_list = []
+    # Add the patient currently in therapy_queue
+
+    therapy_patients_list.append(Patient(9, GaussGenerator(4, 5),
+                                         ExponentialGenerator(3), CODE_YELLOW, 1))
 
     with ThreadPoolExecutor() as executor:
 
         my_futures = [executor.submit(
-            run_single_simulation, waiting_queues) for _ in range(N)]
+            run_single_simulation, waiting_queues, therapy_patients_list) for _ in range(N)]
         wait(my_futures)
 
 
