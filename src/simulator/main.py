@@ -55,37 +55,37 @@ def main():
 
     waiting_queues.push(Patient(id, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_RED, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_RED, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_RED, 0))
 
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(
         2, 2), ExponentialGenerator(2), CODE_YELLOW, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(
         3, 1), ExponentialGenerator(3), CODE_YELLOW, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(
         4, 5), ExponentialGenerator(1), CODE_YELLOW, 0))
 
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), CODE_GREEN, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(3, 1),
                                 ExponentialGenerator(3), CODE_GREEN, 0))
-    id+=1
+    id += 1
     waiting_queues.push(Patient(id, GaussGenerator(4, 5),
                                 ExponentialGenerator(1), CODE_GREEN, 0))
 
     therapyQueue = TherapyQueue()
     # Add the patient currently in therapyQueue
-    id+=1
-    therapyQueue.push(TherapyPatient(id,GaussGenerator(4,5)))
+    id += 1
+    therapyQueue.push(TherapyPatient(id, GaussGenerator(4, 5)))
 
     with ThreadPoolExecutor() as executor:
 
