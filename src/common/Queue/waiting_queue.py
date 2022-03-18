@@ -12,6 +12,11 @@ class WaitingQueue():
         # Add new patient to the corresponding queue
         self.priority_queues[priority_code].push(new_patient)
 
+    def pop(self) -> Patient:
+        for priority_queue in self.priority_queues:
+            if not priority_queue.is_empty():
+                return priority_queue.pop()
+
     def get_patients_count(self):
         count = 0
 

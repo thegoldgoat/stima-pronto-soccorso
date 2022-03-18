@@ -13,7 +13,7 @@ class TherapyPatient(Patient):
         else:
             self.therapy_time = therapy_time
 
-    def update_therapy_time(self,elapsed_time):
+    def decrement_therapy_time(self,elapsed_time):
         self.therapy_time -= elapsed_time
 
     def __lt__(self, nxt):

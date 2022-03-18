@@ -18,16 +18,7 @@ class TherapyQueue():
         """ Return (and pop from the therapy_queue) the therapy patient that has the lowest therapy time (should be = 0)  """
         return self.therapy_queue.pop()
 
-    def update_therapy_times(self, elapsed_time):
+    def decrement_therapy_times(self, elapsed_time):
         """ Update the therapy time for each patient present in the therapy_queue """
         for therapy_patient in self.therapy_queue.heap:
-            therapy_patient.update_therapy_time(elapsed_time)
-
-    # TODO: Safe remove (?)
-    def create_copy_and_generate(self):
-        """ Create a deep copy, generate variabili aleatorie and return """
-        return_value = TherapyQueue()
-        return_value.therapy_queue = MyPriorityQueue(
-            heap=[therapyPatient.clone_and_generate() for therapyPatient in self.therapy_queue.heap])
-
-        return return_value
+            therapy_patient.decrement_therapy_time(elapsed_time)
