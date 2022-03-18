@@ -31,7 +31,7 @@ class InterarrivalQueue:
     def reorder_samples(self):
         self.samples = sorted(self.samples, key=lambda x: x[1])
 
-    def peak(self):
+    def peek(self):
         # Return the minimum
         return self.samples[0]
 
@@ -61,7 +61,7 @@ if __name__ == '__main__':
 
     print('Initial values: ', my_interarrival_queue.samples)
 
-    print('Peak value: ', my_interarrival_queue.peak())
+    print('Peek value: ', my_interarrival_queue.peek())
     print('Pop and regenerate value: ',
           my_interarrival_queue.pop_regenerate_decrement_others())
 
