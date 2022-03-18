@@ -10,4 +10,4 @@ class GaussGenerator(Generator):
 
     def generate_sample(self):
         # TODO: to implement
-        return np.random.default_rng().normal(self.average, self.variance)
+        return max(0, np.random.default_rng().normal(self.average, self.variance)) # value can't be less than zero

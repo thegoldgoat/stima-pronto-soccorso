@@ -28,7 +28,12 @@ def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: L
 
     simulator = Simulator(waiting_queues_copy, therapy_queue)
 
-    result = simulator.simulate()
+    try:
+        result = simulator.simulate()
+    except Exception as e: 
+        # Print exception message even if it's raised in a thread
+        print("Exception in simulator:")
+        print(e)
 
     print("Result is {}".format(result))
 

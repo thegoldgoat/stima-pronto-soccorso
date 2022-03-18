@@ -30,7 +30,7 @@ class InterarrivalQueue:
 
         # Pull
         decrement_amount = return_value[1]
-        self.samples = [(s[0], s[1] - decrement_amount)
+        self.samples = [[s[0], s[1] - decrement_amount]
                         for s in self.samples[1:]]
 
         color_code_to_regenerate = return_value[0]
