@@ -13,11 +13,13 @@ from src.common.patient import Patient
 
 from src.common.Queue.waiting_queue import WaitingQueue
 
+from src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
+
 
 def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: List[Patient]):
     waiting_queues_copy = waiting_queues.create_copy_and_generate()
 
-    therapy_queue = TherapyQueue()
+    therapy_queue = TherapyQueue(2)
 
     for therapy_patient in therapy_patients_list:
         therapy_queue.push(TherapyPatient(therapy_patient.id,
@@ -31,51 +33,46 @@ def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: L
     print("Result is {}".format(result))
 
 
-CODE_RED = 0
-CODE_YELLOW = 1
-CODE_GREEN = 2
-CODE_COUNT = 3
-
 N = 1
 
 
 def main():
     print("Hello simulator!")
 
-    waiting_queues = WaitingQueue(CODE_COUNT)
+    waiting_queues = WaitingQueue(3)
 
     waiting_queues.push(Patient(0, GaussGenerator(2, 2),
-                                ExponentialGenerator(2), CODE_RED, 0))
+                                ExponentialGenerator(2), COLOR_RED, 0))
 
     waiting_queues.push(Patient(1, GaussGenerator(3, 1),
-                                ExponentialGenerator(3), CODE_RED, 0))
+                                ExponentialGenerator(3), COLOR_RED, 0))
 
     waiting_queues.push(Patient(2, GaussGenerator(4, 5),
-                                ExponentialGenerator(1), CODE_RED, 0))
+                                ExponentialGenerator(1), COLOR_RED, 0))
 
     waiting_queues.push(Patient(3, GaussGenerator(
-        2, 2), ExponentialGenerator(2), CODE_YELLOW, 0))
+        2, 2), ExponentialGenerator(2), COLOR_YELLOW, 0))
 
     waiting_queues.push(Patient(4, GaussGenerator(
-        3, 1), ExponentialGenerator(3), CODE_YELLOW, 0))
+        3, 1), ExponentialGenerator(3), COLOR_YELLOW, 0))
 
     waiting_queues.push(Patient(5, GaussGenerator(
-        4, 5), ExponentialGenerator(1), CODE_YELLOW, 0))
+        4, 5), ExponentialGenerator(1), COLOR_YELLOW, 0))
 
     waiting_queues.push(Patient(6, GaussGenerator(2, 2),
-                                ExponentialGenerator(2), CODE_GREEN, 0))
+                                ExponentialGenerator(2), COLOR_GREEN, 0))
 
     waiting_queues.push(Patient(7, GaussGenerator(3, 1),
-                                ExponentialGenerator(3), CODE_GREEN, 0))
+                                ExponentialGenerator(3), COLOR_GREEN, 0))
 
     waiting_queues.push(Patient(8, GaussGenerator(4, 5),
-                                ExponentialGenerator(1), CODE_GREEN, 0))
+                                ExponentialGenerator(1), COLOR_GREEN, 0))
 
     therapy_patients_list = []
     # Add the patient currently in therapy_queue
 
     therapy_patients_list.append(Patient(9, GaussGenerator(4, 5),
-                                         ExponentialGenerator(3), CODE_YELLOW, 1))
+                                         ExponentialGenerator(3), COLOR_YELLOW, 1))
 
     with ThreadPoolExecutor() as executor:
 
