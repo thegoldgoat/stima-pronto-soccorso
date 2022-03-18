@@ -10,7 +10,7 @@ class TherapyQueue():
         """ Add patient to the therapy queue """
         self.therapy_queue.push(new_patient)
 
-    def peak(self):
+    def peek(self):
         """ Get the minimum therapy time present in the therapy_queue """
         return self.therapy_queue.get_min()
 

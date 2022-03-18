@@ -22,8 +22,11 @@ class Patient():
         self.generate_leave()
         self.generate_therapy()
 
-    def decrement_leave_time(self,elapsed_time):
-        self.leave_time -= elapsed_time    
+    def decrement_leave_time(self, elapsed_time):
+        self.leave_time -= elapsed_time
+
+    def decrement_therapy_time(self, elapsed_time):
+        self.therapy_time -= elapsed_time
 
     # Comparator 'less then' aka '<'
     def __lt__(self, nxt):

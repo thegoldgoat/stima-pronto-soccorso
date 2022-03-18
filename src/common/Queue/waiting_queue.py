@@ -17,6 +17,9 @@ class WaitingQueue():
             if not priority_queue.is_empty():
                 return priority_queue.pop()
 
+        raise Exception(
+            "Waiting queue is empty while attempting to pop. Why is the simulation running?")
+
     def get_patients_count(self):
         count = 0
 
