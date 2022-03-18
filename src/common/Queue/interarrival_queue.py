@@ -1,29 +1,17 @@
 from curses import COLOR_GREEN, COLOR_RED
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 
-COLOR_RED = 0
-COLOR_YELLOW = 1
-COLOR_GREEN = 2
-
-COLORS = [COLOR_RED, COLOR_YELLOW, COLOR_GREEN]
-
-COLOR_RATES = [
-    # Red
-    1,
-    # Yellow
-    3,
-    # Green
-    5
-]
+import src.common.ColorCode.color_constants as color_constants
 
 
 class InterarrivalQueue:
     def __init__(self):
-        self.generators = [ExponentialGenerator(rate) for rate in COLOR_RATES]
+        self.generators = [ExponentialGenerator(
+            rate) for rate in color_constants.COLOR_RATES]
 
         self.samples = [
-            (color_index, self.generators[color_index].generate_sample())
-            for color_index in COLORS
+            [color_index, self.generators[color_index].generate_sample()]
+            for color_index in color_constants.COLORS
         ]
 
         self.reorder_samples()
@@ -48,12 +36,18 @@ class InterarrivalQueue:
         color_code_to_regenerate = return_value[0]
 
         # Push
-        self.samples.append(
-            (color_code_to_regenerate, self.generators[color_code_to_regenerate].generate_sample()))
+        self.samples.append([
+            color_code_to_regenerate,
+            self.generators[color_code_to_regenerate].generate_sample()
+        ])
 
         self.reorder_samples()
 
         return return_value
+
+    def decrement_interarrive(self, decrement_amount):
+        for sample in self.samples:
+            sample[1] -= decrement_amount
 
 
 if __name__ == '__main__':

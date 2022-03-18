@@ -1,4 +1,5 @@
 from .generator import Generator
+import numpy as np
 
 
 class GaussGenerator(Generator):
@@ -9,4 +10,4 @@ class GaussGenerator(Generator):
 
     def generate_sample(self):
         # TODO: to implement
-        return 12345
+        return np.random.default_rng().normal(self.average, self.variance)
