@@ -10,6 +10,7 @@ class TherapyQueue():
         """ Add patient to the therapy queue """
         self.therapy_queue.push(new_patient)
 
+    # TODO: Safe remove (?)
     def create_copy_and_generate(self):
         """ Create a deep copy, generate variabili aleatorie and return """
         return_value = TherapyQueue()
