@@ -13,6 +13,9 @@ class TherapyPatient(Patient):
         else:
             self.therapy_time = therapy_time
 
+    def update_therapy_time(self,elapsed_time):
+        self.therapy_time -= elapsed_time
+
     def __lt__(self, nxt):
         return self.therapy_time < nxt.therapy_time
 
