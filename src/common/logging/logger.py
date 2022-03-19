@@ -1,13 +1,13 @@
 import logging
 
 
-def createLogginWithName(name: str):
+def createLogginWithName(name: str, level=logging.WARN):
     logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(level)
 
     # create console handler and set level to debug
     ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(level)
 
     # create formatter
     formatter = logging.Formatter(

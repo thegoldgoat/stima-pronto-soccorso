@@ -93,6 +93,12 @@ def main():
             run_single_simulation, waiting_queues, therapy_patients_list) for _ in range(N)]
         wait(my_futures)
 
+        '''
+            Dictionary of dictionary
+
+            waiting_times_histogram[patient_id][waiting_time] indicates the amount of times
+            patient_id has waited waiting_times
+        '''
         waiting_times_histogram = dict()
 
         for fut in my_futures:
@@ -108,17 +114,26 @@ def main():
                     waiting_times_histogram[patient_id] = {waiting_time: 1}
 
         for (patient_id, patient_histogram) in waiting_times_histogram.items():
-            print("\n----\nPatient ID = {}".format(patient_id))
-            ascii_histogram(patient_histogram)
-        # import json
-        # print(json.dumps(waiting_times_histogram))
+            # print("\n----\nPatient ID = {}".format(patient_id))
+            plot_histogram(patient_histogram, patient_id)
+
+        import pprint
+        pprint.pprint(waiting_times_histogram)
 
 
-def ascii_histogram(counted) -> None:
-    """A horizontal frequency-table/histogram plot."""
-    from math import ceil
-    for k in sorted(counted):
-        print('{0:4d} {1}'.format(k, '+' * ceil(counted[k] * 100 / N)))
+def plot_histogram(values, pat_id) -> None:
+    import matplotlib.pyplot as plt
+
+    max_wait = max(values.keys()) + 1
+
+    plt.clf()
+
+    plt.bar(range(max_wait), [
+            values[i] if i in values else 0 for i in range(max_wait)])
+
+    plt.xticks(range(max_wait), [i for i in range(max_wait)])
+
+    plt.savefig('{}.png'.format(pat_id))
 
 
 if __name__ == '__main__':
