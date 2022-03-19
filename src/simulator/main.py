@@ -45,8 +45,10 @@ def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: L
     for (patient_id, waiting_time) in result.items():
         logger.debug('ID={0}\tTime={1}'.format(patient_id, waiting_time))
 
+    return result
 
-N = 1
+
+N = 100
 
 
 def main():
@@ -85,11 +87,27 @@ def main():
     therapy_patients_list.append(Patient(9, GaussGenerator(4, 5),
                                          ExponentialGenerator(3), COLOR_YELLOW, 1))
 
-    with ThreadPoolExecutor() as executor:
+    with ThreadPoolExecutor(max_workers=1) as executor:
 
         my_futures = [executor.submit(
             run_single_simulation, waiting_queues, therapy_patients_list) for _ in range(N)]
         wait(my_futures)
+
+        aggregated_result = dict()
+
+        for fut in my_futures:
+            for (patient_id, waiting_time) in fut._result.items():
+                if patient_id in aggregated_result:
+                    aggregated_result[patient_id] += waiting_time
+                else:
+                    aggregated_result[patient_id] = 0
+
+        for key in aggregated_result.keys():
+            aggregated_result[key] /= N
+
+        logger.info("Average waiting times:")
+        for (patient_id, waiting_time) in aggregated_result.items():
+            logger.debug('ID={0}\tTime={1}'.format(patient_id, waiting_time))
 
 
 if __name__ == '__main__':
