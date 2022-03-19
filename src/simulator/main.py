@@ -15,8 +15,14 @@ from src.common.Queue.waiting_queue import WaitingQueue
 
 from src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
 
+from src.common.logging.logger import createLogginWithName
+
+logger = createLogginWithName('Main')
+
 
 def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: List[Patient]):
+    logger.debug("Launching simulation preparation")
+
     waiting_queues_copy = waiting_queues.create_copy_and_generate()
 
     therapy_queue = TherapyQueue(2)
@@ -30,20 +36,20 @@ def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: L
 
     try:
         result = simulator.simulate()
-    except Exception as e: 
+    except Exception as e:
         # Print exception message even if it's raised in a thread
-        print("Exception in simulator:")
-        print(e)
+        logger.exception("Exception in simulator")
 
-    print("Result is {}".format(result))
+    logger.info('Simulation ended in %s iterations',
+                simulator.iteration_count)
+    for (patient_id, waiting_time) in result.items():
+        logger.debug('ID={0}\tTime={1}'.format(patient_id, waiting_time))
 
 
 N = 1
 
 
 def main():
-    print("Hello simulator!")
-
     waiting_queues = WaitingQueue(3)
 
     waiting_queues.push(Patient(0, GaussGenerator(2, 2),

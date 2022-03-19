@@ -6,6 +6,10 @@ from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Queue.therapy_queue import TherapyQueue
 from src.common.ColorCode.color_constants import COLOR_GAUSSIANS, COLOR_LEAVE
 
+from src.common.logging.logger import createLogginWithName
+
+logger = createLogginWithName('Simulator')
+
 
 class Simulator():
     def __init__(self, waiting_queues: WaitingQueue, therapy_state: TherapyQueue):
@@ -18,13 +22,15 @@ class Simulator():
             Returns a Dict whose key is the Patient ID, while the value is
             the time it took for it to be moved in therapy
         '''
-        print("Starting simulation!")
+        logger.info("Starting simulation")
 
         self.current_time = 0
         self.result_dict = dict()
         self.total_initial_patients_in_queue = self._waiting_queues.get_patients_count()
 
         self.moved_in_therapy_patients = 0
+
+        self.iteration_count = 0
 
         # Move as many patient from waiting to therapy as you can
         while self._therapy_state.is_full() is False:
@@ -50,6 +56,12 @@ class Simulator():
                 leave_time
         '''
 
+        self.iteration_count += 1
+
+        logger.debug("Iteration %s", self.iteration_count)
+        logger.debug("Moved patients / Initial patients : %s / %s",
+                     self.moved_in_therapy_patients, self.total_initial_patients_in_queue)
+
         minimum_therapy = self._therapy_state.peek()
         minimum_interarrive = self._interarrive_state.peek()
 
@@ -57,6 +69,8 @@ class Simulator():
 
         if minimum_therapy.therapy_time < minimum_interarrive[1]:
             # Therapy is minimum
+            logger.debug("Therapy leave event: Patient ID=%s",
+                         minimum_therapy.id)
             time_elapsed = minimum_therapy.therapy_time
 
             self.current_time += time_elapsed
@@ -75,6 +89,8 @@ class Simulator():
 
         else:
             # Interarrive is minimum
+            logger.debug("Interarrive event: Color Code=%s",
+                         minimum_interarrive[0])
 
             color_index = minimum_interarrive[0]
             time_elapsed = minimum_interarrive[1]
