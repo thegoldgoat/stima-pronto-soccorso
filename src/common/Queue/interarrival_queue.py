@@ -1,4 +1,3 @@
-from curses import COLOR_GREEN, COLOR_RED
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 
 COLOR_RED = 0
@@ -54,15 +53,3 @@ class InterarrivalQueue:
         self.reorder_samples()
 
         return return_value
-
-
-if __name__ == '__main__':
-    my_interarrival_queue = InterarrivalQueue()
-
-    print('Initial values: ', my_interarrival_queue.samples)
-
-    print('Peak value: ', my_interarrival_queue.peak())
-    print('Pop and regenerate value: ',
-          my_interarrival_queue.pop_regenerate_decrement_others())
-
-    print('Values after pop and regenerate: ', my_interarrival_queue.samples)
