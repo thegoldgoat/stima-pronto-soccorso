@@ -34,6 +34,7 @@ class Simulator():
 
         # Move as many patient from waiting to therapy as you can
         while self._therapy_state.is_full() is False:
+            logger.debug("Therapy not full. Automatically fill it")
             self._move_from_waiting_to_therapy()
 
         while self.moved_in_therapy_patients != self.total_initial_patients_in_queue:
@@ -75,11 +76,6 @@ class Simulator():
 
             self.current_time += time_elapsed
 
-            # Patient is cured.
-            if minimum_therapy.id >= 0:
-                # Patient is real
-                self.result_dict[minimum_therapy.id] = self.current_time
-
             self._therapy_state.pop()
 
             self._therapy_state.decrement_therapy_times(time_elapsed)
@@ -112,6 +108,8 @@ class Simulator():
         patient_to_move = self._waiting_queues.pop()
 
         if patient_to_move.id >= 0:
+            # Patient is real, their waiting time is finished
+            self.result_dict[patient_to_move.id] = self.current_time
             self.moved_in_therapy_patients += 1
 
         therapy_patient_to_move = TherapyPatient(

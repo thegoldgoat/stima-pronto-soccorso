@@ -58,28 +58,28 @@ def main():
                                 ExponentialGenerator(2), COLOR_RED, 0))
 
     waiting_queues.push(Patient(1, GaussGenerator(3, 1),
-                                ExponentialGenerator(3), COLOR_RED, 0))
+                                ExponentialGenerator(3), COLOR_RED, 1))
 
     waiting_queues.push(Patient(2, GaussGenerator(4, 5),
-                                ExponentialGenerator(1), COLOR_RED, 0))
+                                ExponentialGenerator(1), COLOR_RED, 2))
 
     waiting_queues.push(Patient(3, GaussGenerator(
         2, 2), ExponentialGenerator(2), COLOR_YELLOW, 0))
 
     waiting_queues.push(Patient(4, GaussGenerator(
-        3, 1), ExponentialGenerator(3), COLOR_YELLOW, 0))
+        3, 1), ExponentialGenerator(3), COLOR_YELLOW, 1))
 
     waiting_queues.push(Patient(5, GaussGenerator(
-        4, 5), ExponentialGenerator(1), COLOR_YELLOW, 0))
+        4, 5), ExponentialGenerator(1), COLOR_YELLOW, 2))
 
     waiting_queues.push(Patient(6, GaussGenerator(2, 2),
                                 ExponentialGenerator(2), COLOR_GREEN, 0))
 
     waiting_queues.push(Patient(7, GaussGenerator(3, 1),
-                                ExponentialGenerator(3), COLOR_GREEN, 0))
+                                ExponentialGenerator(3), COLOR_GREEN, 1))
 
-    waiting_queues.push(Patient(8, GaussGenerator(4, 5),
-                                ExponentialGenerator(1), COLOR_GREEN, 0))
+    waiting_queues.push(Patient(8, GaussGenerator(1, 1),
+                                ExponentialGenerator(1), COLOR_GREEN, 2))
 
     therapy_patients_list = []
     # Add the patient currently in therapy_queue
@@ -100,7 +100,7 @@ def main():
                 if patient_id in aggregated_result:
                     aggregated_result[patient_id] += waiting_time
                 else:
-                    aggregated_result[patient_id] = 0
+                    aggregated_result[patient_id] = waiting_time
 
         for key in aggregated_result.keys():
             aggregated_result[key] /= N
