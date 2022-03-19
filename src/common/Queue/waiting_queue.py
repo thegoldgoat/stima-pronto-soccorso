@@ -12,6 +12,22 @@ class WaitingQueue():
         # Add new patient to the corresponding queue
         self.priority_queues[priority_code].push(new_patient)
 
+    def pop(self) -> Patient:
+        for priority_queue in self.priority_queues:
+            if not priority_queue.is_empty():
+                return priority_queue.pop()
+
+        raise Exception(
+            "Waiting queue is empty while attempting to pop. Why is the simulation running?")
+
+    def get_patients_count(self):
+        count = 0
+
+        for queue in self.priority_queues:
+            count += len(queue.heap)
+
+        return count
+
     def create_copy_and_generate(self):
         # create a deep copy, generate variabili aleatorie and return
         return_value = WaitingQueue(0)
