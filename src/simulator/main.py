@@ -87,27 +87,38 @@ def main():
     therapy_patients_list.append(Patient(9, GaussGenerator(4, 5),
                                          ExponentialGenerator(3), COLOR_YELLOW, 1))
 
-    with ThreadPoolExecutor(max_workers=1) as executor:
+    with ThreadPoolExecutor() as executor:
 
         my_futures = [executor.submit(
             run_single_simulation, waiting_queues, therapy_patients_list) for _ in range(N)]
         wait(my_futures)
 
-        aggregated_result = dict()
+        waiting_times_histogram = dict()
 
         for fut in my_futures:
             for (patient_id, waiting_time) in fut._result.items():
-                if patient_id in aggregated_result:
-                    aggregated_result[patient_id] += waiting_time
+                if patient_id in waiting_times_histogram:
+
+                    if waiting_time in waiting_times_histogram[patient_id]:
+                        waiting_times_histogram[patient_id][waiting_time] += 1
+                    else:
+                        waiting_times_histogram[patient_id][waiting_time] = 1
+
                 else:
-                    aggregated_result[patient_id] = waiting_time
+                    waiting_times_histogram[patient_id] = {waiting_time: 1}
 
-        for key in aggregated_result.keys():
-            aggregated_result[key] /= N
+        for (patient_id, patient_histogram) in waiting_times_histogram.items():
+            print("\n----\nPatient ID = {}".format(patient_id))
+            ascii_histogram(patient_histogram)
+        # import json
+        # print(json.dumps(waiting_times_histogram))
 
-        logger.info("Average waiting times:")
-        for (patient_id, waiting_time) in aggregated_result.items():
-            logger.debug('ID={0}\tTime={1}'.format(patient_id, waiting_time))
+
+def ascii_histogram(counted) -> None:
+    """A horizontal frequency-table/histogram plot."""
+    from math import ceil
+    for k in sorted(counted):
+        print('{0:4d} {1}'.format(k, '+' * ceil(counted[k] * 100 / N)))
 
 
 if __name__ == '__main__':
