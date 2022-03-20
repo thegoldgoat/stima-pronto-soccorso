@@ -1,25 +1,19 @@
 from concurrent.futures import ThreadPoolExecutor, wait
 from typing import List
-
 from src.common.therapy_patient import TherapyPatient
-
 from src.common.Queue.therapy_queue import TherapyQueue
-
-from .generators.gauss_generator import GaussGenerator
-from .generators.exponential_generator import ExponentialGenerator
-from .simulator import Simulator
-
+from src.simulator.generators.gauss_generator import GaussGenerator
+from src.simulator.generators.exponential_generator import ExponentialGenerator
+from src.simulator.simulator import Simulator
 from src.common.patient import Patient
-
 from src.common.Queue.waiting_queue import WaitingQueue
-
 from src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
-
 from src.common.logging.logger import createLogginWithName
+import src.simulator.plot_results as plot_results
 
 logger = createLogginWithName('Main')
 
-
+@plot_results.run_single_simulation_decorator
 def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: List[Patient]):
     logger.debug("Launching simulation preparation")
 
@@ -48,7 +42,7 @@ def run_single_simulation(waiting_queues: WaitingQueue, therapy_patients_list: L
     return result
 
 
-N = 100
+N = 5000
 
 
 def main():
@@ -93,48 +87,49 @@ def main():
             run_single_simulation, waiting_queues, therapy_patients_list) for _ in range(N)]
         wait(my_futures)
 
-        '''
-            Dictionary of dictionary
+#         '''
+#             Dictionary of dictionary
 
-            waiting_times_histogram[patient_id][waiting_time] indicates the amount of times
-            patient_id has waited waiting_times
-        '''
-        waiting_times_histogram = dict()
+#             waiting_times_histogram[patient_id][waiting_time] indicates the amount of times
+#             patient_id has waited waiting_times
+#         '''
+#         waiting_times_histogram = dict()
 
-        for fut in my_futures:
-            for (patient_id, waiting_time) in fut._result.items():
-                if patient_id in waiting_times_histogram:
+#         for fut in my_futures:
+#             for (patient_id, waiting_time) in fut._result.items():
+#                 if patient_id in waiting_times_histogram:
 
-                    if waiting_time in waiting_times_histogram[patient_id]:
-                        waiting_times_histogram[patient_id][waiting_time] += 1
-                    else:
-                        waiting_times_histogram[patient_id][waiting_time] = 1
+#                     if waiting_time in waiting_times_histogram[patient_id]:
+#                         waiting_times_histogram[patient_id][waiting_time] += 1
+#                     else:
+#                         waiting_times_histogram[patient_id][waiting_time] = 1
 
-                else:
-                    waiting_times_histogram[patient_id] = {waiting_time: 1}
+#                 else:
+#                     waiting_times_histogram[patient_id] = {waiting_time: 1}
 
-        for (patient_id, patient_histogram) in waiting_times_histogram.items():
-            # print("\n----\nPatient ID = {}".format(patient_id))
-            plot_histogram(patient_histogram, patient_id)
+#         for (patient_id, patient_histogram) in waiting_times_histogram.items():
+#             # print("\n----\nPatient ID = {}".format(patient_id))
+#             plot_histogram(patient_histogram, patient_id)
 
-        import pprint
-        pprint.pprint(waiting_times_histogram)
+#         import pprint
+#         pprint.pprint(waiting_times_histogram)
 
 
-def plot_histogram(values, pat_id) -> None:
-    import matplotlib.pyplot as plt
+# def plot_histogram(values, pat_id) -> None:
+#     import matplotlib.pyplot as plt
 
-    max_wait = max(values.keys()) + 1
+#     max_wait = max(values.keys()) + 1
 
-    plt.clf()
+#     plt.clf()
 
-    plt.bar(range(max_wait), [
-            values[i] if i in values else 0 for i in range(max_wait)])
+#     plt.bar(range(max_wait), [
+#             values[i] if i in values else 0 for i in range(max_wait)])
 
-    plt.xticks(range(max_wait), [i for i in range(max_wait)])
+#     plt.xticks(range(max_wait), [i for i in range(max_wait)])
 
-    plt.savefig('{}.png'.format(pat_id))
+#     plt.savefig('{}.png'.format(pat_id))
 
 
 if __name__ == '__main__':
     main()
+    plot_results.plot_occurrences(N)

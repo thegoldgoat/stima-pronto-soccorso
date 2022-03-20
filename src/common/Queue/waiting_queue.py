@@ -1,4 +1,4 @@
-from ..patient import Patient
+from src.common.patient import Patient
 from .my_priority_queue import MyPriorityQueue
 
 

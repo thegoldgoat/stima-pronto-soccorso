@@ -1,4 +1,3 @@
-from curses import COLOR_GREEN, COLOR_RED
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 
 import src.common.ColorCode.color_constants as color_constants
