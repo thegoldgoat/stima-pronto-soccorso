@@ -1,5 +1,4 @@
 from threading import Lock
-from unittest import result
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -45,7 +44,7 @@ def plot_occurrences(N):
         mask = np.argsort(x_values)
         x_values = x_values[mask]
         y_values = y_values[mask]
-    
+        plt.clf()
         plt.stem(x_values, y_values, linefmt='blue', markerfmt=" ")
         plt.xlabel("Wating time")
         plt.ylabel("Occurrences")
