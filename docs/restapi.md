@@ -2,6 +2,6 @@
 
 ## Endpoint
 
-GET /esteem/:patientId
+GET /patient/:patientId
 
 GET /monitor/all
