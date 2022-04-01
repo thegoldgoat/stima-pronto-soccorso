@@ -4,7 +4,7 @@ from .patient_model import PatientModel
 
 
 class TherapyPatientModel(mongoengine.Document):
-    patientId = mongoengine.ReferenceField(
+    patient_id = mongoengine.ReferenceField(
         PatientModel, reverse_delete_rule=mongoengine.CASCADE)
 
     entry_time = mongoengine.DateTimeField(required=True)
