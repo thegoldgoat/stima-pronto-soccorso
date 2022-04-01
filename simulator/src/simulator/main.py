@@ -13,52 +13,60 @@ from src.common.Models.waiting_patient_model import WaitingPatientModel
 from src.common.Models.therapy_patient_model import TherapyPatientModel
 import math
 
-logger = createLogginWithName('Main',logging.INFO)
+logger = createLogginWithName('Main', logging.INFO)
 
 N = 10000
 
+
 def normalizeTime(time: datetime):
-    delta = time - datetime.now() 
+    delta = time - datetime.now()
     return math.ceil(delta.total_seconds()/60)
-    
 
 
 def main():
     mongoengine.connect("stima-pronto-soccorso")
     waiting_queues = WaitingQueue(3)
 
+    print('canex')
+    print(WaitingPatientModel.objects)
+
     for waiting_patient in WaitingPatientModel.objects:
         waiting_queues.push(
             Patient(
-                waiting_patient.pk, 
-                GaussGenerator(waiting_patient.average, waiting_patient.deviation),
-                ExponentialGenerator(1), # TODO get from db when implemented in the model
+                waiting_patient.pk,
+                GaussGenerator(waiting_patient.average,
+                               waiting_patient.deviation),
+                # TODO get from db when implemented in the model
+                ExponentialGenerator(1),
                 waiting_patient.emergency_code.value,
                 normalizeTime(waiting_patient.arrival_time)
-                )
             )
-    
-    logger.info("Loaded {} patients in waiting queue".format(waiting_queues.get_patients_count()))
+        )
+
+    logger.info("Loaded {} patients in waiting queue".format(
+        waiting_queues.get_patients_count()))
 
     therapy_patients_list = []
     # Add the patient currently in therapy_queue
-
 
     for therapy_patient in TherapyPatientModel.objects:
         therapy_patients_list.append(
             Patient(
                 therapy_patient.pk,
-                GaussGenerator(therapy_patient.average, therapy_patient.deviation),
-                ExponentialGenerator(1), # TODO get from db when implemented in the model
+                GaussGenerator(therapy_patient.average,
+                               therapy_patient.deviation),
+                # TODO get from db when implemented in the model
+                ExponentialGenerator(1),
                 None,
                 normalizeTime(therapy_patient.entry_time)
-                )
             )
+        )
 
-    
-    logger.info("Loaded {} patients in therapy state".format(len(therapy_patients_list)))
+    logger.info("Loaded {} patients in therapy state".format(
+        len(therapy_patients_list)))
 
-    simulation_manager = SimulationManager(waiting_queues, therapy_patients_list, N)
+    simulation_manager = SimulationManager(
+        waiting_queues, therapy_patients_list, N)
     simulation_manager.run_all_simulation_sync()
     simulation_manager.plot_all()
     simulation_manager.store_all()

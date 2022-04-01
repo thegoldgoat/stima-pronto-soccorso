@@ -5,7 +5,7 @@ from .simulation_model import SimulationModel
 
 
 class EsteemModel(mongoengine.Document):
-    patientId = mongoengine.ReferenceField(
+    patient_id = mongoengine.ReferenceField(
         PatientModel, reverse_delete_rule=mongoengine.CASCADE)
 
     waiting_times = mongoengine.DictField(required=True)

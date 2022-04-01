@@ -11,7 +11,7 @@ class EmergencyCode(Enum):
 
 
 class WaitingPatientModel(mongoengine.Document):
-    patientId = mongoengine.ReferenceField(
+    patient_id = mongoengine.ReferenceField(
         PatientModel, reverse_delete_rule=mongoengine.CASCADE)
 
     arrival_time = mongoengine.DateTimeField(required=True)

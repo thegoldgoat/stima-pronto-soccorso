@@ -11,7 +11,6 @@ from src.common.logging.logger import createLogginWithName
 from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
 
-import mongoengine
 from src.common.Models.simulation_model import SimulationModel
 from src.common.Models.esteem_model import EsteemModel
 
@@ -104,9 +103,11 @@ class SimulationManager:
             plt.savefig('{0}patient{1}.png'.format(base_path, patient_id))
 
     def store_all(self):
-        simulation = SimulationModel(simulation_time = datetime.now()).save()
+        simulation = SimulationModel(simulation_time=datetime.now()).save()
         for patient_id, waiting_times in self.aggregated_results.items():
             normalized_waiting_times = {}
             for (time, occurrence) in waiting_times.items():
-                normalized_waiting_times[str(time)]=occurrence/self._simulation_count
-            EsteemModel(simulation_id=simulation, patientId=patient_id, waiting_times=normalized_waiting_times).save()
+                normalized_waiting_times[str(
+                    time)] = occurrence/self._simulation_count
+            EsteemModel(simulation_id=simulation, patient_id=patient_id,
+                        waiting_times=normalized_waiting_times).save()
