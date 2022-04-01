@@ -30,7 +30,7 @@ def main():
     for waiting_patient in WaitingPatientModel.objects:
         waiting_queues.push(
             Patient(
-                str(waiting_patient.pk),
+                str(waiting_patient.patient_id.pk),
                 GaussGenerator(waiting_patient.average,
                                waiting_patient.deviation),
                 # TODO get from db when implemented in the model
