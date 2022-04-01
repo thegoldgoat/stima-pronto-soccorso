@@ -27,6 +27,7 @@ const esteemSchema = new Schema<Esteem>(
   },
   {
     collection: 'esteem_model',
+    versionKey: false,
   }
 )
 

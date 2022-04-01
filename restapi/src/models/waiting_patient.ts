@@ -37,6 +37,7 @@ const waitingPatientSchema = new Schema<WaitingPatient>(
   },
   {
     collection: 'waiting_patient_model',
+    versionKey: false,
   }
 )
 

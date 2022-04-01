@@ -31,6 +31,7 @@ const therapyPatientSchema = new Schema<TherapyPatient>(
   },
   {
     collection: 'therapy_patient_model',
+    versionKey: false,
   }
 )
 

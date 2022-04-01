@@ -13,6 +13,7 @@ const simulationSchema = new Schema<Simulation>(
   },
   {
     collection: 'simulation_model',
+    versionKey: false,
   }
 )
 
