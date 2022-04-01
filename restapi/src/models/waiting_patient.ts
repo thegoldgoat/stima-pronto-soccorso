@@ -10,30 +10,35 @@ interface WaitingPatient {
   deviation: Number
 }
 
-const waitingPatientSchema = new Schema<WaitingPatient>({
-  patient_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'patients',
-    required: true,
+const waitingPatientSchema = new Schema<WaitingPatient>(
+  {
+    patient_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'patients',
+      required: true,
+    },
+    arrival_time: {
+      type: Schema.Types.Date,
+      required: true,
+    },
+    emergency_code: {
+      type: Number,
+      enum: [0, 1, 2],
+      required: true,
+    },
+    average: {
+      type: Number,
+      required: true,
+    },
+    deviation: {
+      type: Number,
+      required: true,
+    },
   },
-  arrival_time: {
-    type: Schema.Types.Date,
-    required: true,
-  },
-  emergency_code: {
-    type: Number,
-    enum: [0, 1, 2],
-    required: true,
-  },
-  average: {
-    type: Number,
-    required: true,
-  },
-  deviation: {
-    type: Number,
-    required: true,
-  },
-})
+  {
+    collection: 'waiting_patient_model',
+  }
+)
 
 const waitingPatientModel = model('waiting', waitingPatientSchema)
 

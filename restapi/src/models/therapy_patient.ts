@@ -9,25 +9,30 @@ interface TherapyPatient {
   deviation: Number
 }
 
-const therapyPatientSchema = new Schema<TherapyPatient>({
-  patient_id: {
-    type: Schema.Types.ObjectId,
-    ref: 'patients',
-    required: true,
+const therapyPatientSchema = new Schema<TherapyPatient>(
+  {
+    patient_id: {
+      type: Schema.Types.ObjectId,
+      ref: 'patients',
+      required: true,
+    },
+    entry_time: {
+      type: Schema.Types.Date,
+      required: true,
+    },
+    average: {
+      type: Number,
+      required: true,
+    },
+    deviation: {
+      type: Number,
+      required: true,
+    },
   },
-  entry_time: {
-    type: Schema.Types.Date,
-    required: true,
-  },
-  average: {
-    type: Number,
-    required: true,
-  },
-  deviation: {
-    type: Number,
-    required: true,
-  },
-})
+  {
+    collection: 'therapy_patient_model',
+  }
+)
 
 const therapyPatientModel = model('therapy', therapyPatientSchema)
 

@@ -4,12 +4,17 @@ interface Simulation {
   simulation_time: Date
 }
 
-const simulationSchema = new Schema<Simulation>({
-  simulation_time: {
-    type: Schema.Types.Date,
-    required: true,
+const simulationSchema = new Schema<Simulation>(
+  {
+    simulation_time: {
+      type: Schema.Types.Date,
+      required: true,
+    },
   },
-})
+  {
+    collection: 'simulation_model',
+  }
+)
 
 const simulationModel = model('simulation', simulationSchema)
 
