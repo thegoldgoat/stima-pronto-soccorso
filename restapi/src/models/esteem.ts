@@ -5,7 +5,7 @@ interface Esteem {
 
   simulation_id: ObjectId
 
-  waiting_times: Object
+  waiting_times: Map<string, number>
 }
 
 const esteemSchema = new Schema<Esteem>(

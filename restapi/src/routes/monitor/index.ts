@@ -13,8 +13,6 @@ monitorRoutes.use(async (req: Request, res: Response, next) => {
 type PatientEsteem = Esteem & { emergency_code: Number; arrival_time: Date }
 
 async function populatePatientId(esteem: PatientEsteem) {
-  console.debug('esteem before', esteem)
-
   const waitingPatient = await waitingPatientModel.findOne(
     { patient_id: esteem.patient_id },
     { _id: 0, emergency_code: 1, arrival_time: 1 }
@@ -25,15 +23,11 @@ async function populatePatientId(esteem: PatientEsteem) {
       'Unable to find waiting patient for ID=' + esteem.patient_id
     )
 
-  console.debug('waitingPatient', waitingPatient)
-
   esteem.emergency_code = waitingPatient.emergency_code
   esteem.arrival_time = waitingPatient.arrival_time
 
   // TODO: ecmascript 2019 (?)
-  esteem.waiting_times = Object.fromEntries(esteem.waiting_times)
-
-  console.debug('esteem after', esteem)
+  esteem.waiting_times = Object.fromEntries(esteem.waiting_times) as any
 }
 
 monitorRoutes.get('/all', async (req: Request, res: Response) => {
@@ -59,8 +53,6 @@ monitorRoutes.get('/all', async (req: Request, res: Response) => {
   })
 
   await Promise.all(allPromises)
-
-  console.debug('esteemsObject', esteemsObject)
 
   return res.json(esteemsObject)
 })
