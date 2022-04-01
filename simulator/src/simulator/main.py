@@ -27,13 +27,10 @@ def main():
     mongoengine.connect("stima-pronto-soccorso")
     waiting_queues = WaitingQueue(3)
 
-    print('canex')
-    print(WaitingPatientModel.objects)
-
     for waiting_patient in WaitingPatientModel.objects:
         waiting_queues.push(
             Patient(
-                waiting_patient.pk,
+                str(waiting_patient.pk),
                 GaussGenerator(waiting_patient.average,
                                waiting_patient.deviation),
                 # TODO get from db when implemented in the model
@@ -52,7 +49,7 @@ def main():
     for therapy_patient in TherapyPatientModel.objects:
         therapy_patients_list.append(
             Patient(
-                therapy_patient.pk,
+                str(therapy_patient.pk),
                 GaussGenerator(therapy_patient.average,
                                therapy_patient.deviation),
                 # TODO get from db when implemented in the model

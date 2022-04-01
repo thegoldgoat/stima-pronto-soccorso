@@ -2,7 +2,6 @@ from concurrent.futures import ThreadPoolExecutor, wait
 from datetime import datetime
 from threading import Lock
 from typing import Dict, List
-import numpy as np
 
 from src.simulator.simulator import Simulator
 from src.common.therapy_patient import TherapyPatient
@@ -60,7 +59,7 @@ class SimulationManager:
 
         waiting_queues_copy = self._initial_waiting_queues.create_copy_and_generate()
 
-        therapy_queue = TherapyQueue(2)
+        therapy_queue = TherapyQueue(len(self._initial_therapy_patients_list))
 
         for therapy_patient in self._initial_therapy_patients_list:
             therapy_queue.push(TherapyPatient(therapy_patient.id,
