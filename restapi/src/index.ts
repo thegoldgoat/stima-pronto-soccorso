@@ -3,7 +3,8 @@ const API_PORT = process.env.PORT || 8000
 import express, { json, Request, Response } from 'express'
 import { connect } from 'mongoose'
 
-import patientRouter from './routes/patient/index'
+import monitorRoutes from './routes/monitor'
+import patientRouter from './routes/patient'
 
 async function main() {
   let mongoClient: typeof import('mongoose')
@@ -32,6 +33,7 @@ async function main() {
   app.use(json())
 
   app.use('/patient', patientRouter)
+  app.use('/monitor', monitorRoutes)
 
   app.listen(API_PORT)
   console.log(`Listening on port ${API_PORT}`)
