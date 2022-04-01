@@ -93,7 +93,7 @@ class Simulator():
 
             self.current_time += time_elapsed
 
-            new_patient = Patient(-1, COLOR_GAUSSIANS[color_index],
+            new_patient = Patient("", COLOR_GAUSSIANS[color_index],
                                   COLOR_LEAVE[color_index], color_index, self.current_time)
 
             new_patient.generate_leave()
@@ -107,7 +107,7 @@ class Simulator():
         # Move one patient from the waiting queue to therapy
         patient_to_move = self._waiting_queues.pop()
 
-        if patient_to_move.id >= 0:
+        if patient_to_move.id != "":
             # Patient is real, their waiting time is finished
             self.result_dict[patient_to_move.id] = self.current_time
             self.moved_in_therapy_patients += 1

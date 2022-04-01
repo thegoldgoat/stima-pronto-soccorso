@@ -1,4 +1,5 @@
 from concurrent.futures import ThreadPoolExecutor, wait
+from datetime import datetime
 from threading import Lock
 from typing import Dict, List
 import numpy as np
@@ -9,6 +10,10 @@ from src.common.Queue.therapy_queue import TherapyQueue
 from src.common.logging.logger import createLogginWithName
 from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
+
+import mongoengine
+from src.common.Models.simulation_model import SimulationModel
+from src.common.Models.esteem_model import EsteemModel
 
 logger = createLogginWithName('SimulationManager')
 
@@ -97,3 +102,11 @@ class SimulationManager:
             plt.suptitle(f"Patient {patient_id}")
 
             plt.savefig('{0}patient{1}.png'.format(base_path, patient_id))
+
+    def store_all(self):
+        simulation = SimulationModel(simulation_time = datetime.now()).save()
+        for patient_id, waiting_times in self.aggregated_results.items():
+            normalized_waiting_times = {}
+            for (time, occurrence) in waiting_times.items():
+                normalized_waiting_times[str(time)]=occurrence/self._simulation_count
+            EsteemModel(simulation_id=simulation, patientId=patient_id, waiting_times=normalized_waiting_times).save()

@@ -4,6 +4,8 @@ import mongoengine
 from src.common.Models.patient_model import PatientModel
 from src.common.Models.waiting_patient_model import WaitingPatientModel
 from src.common.Models.therapy_patient_model import TherapyPatientModel
+from src.common.Models.esteem_model import EsteemModel
+from src.common.Models.simulation_model import SimulationModel
 from src.common.ColorCode import color_constants
 
 def insertPatients():
@@ -55,4 +57,4 @@ def insertPatients():
 
 if __name__ == "__main__":
     mongoengine.connect("stima-pronto-soccorso")
-    
+    insertPatients()
