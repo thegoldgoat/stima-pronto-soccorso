@@ -1,9 +1,9 @@
 from copy import deepcopy
 import unittest
-from src.common.Queue.interarrival_queue import InterarrivalQueue
-from src.common.patient import Patient
-from src.simulator.generators.gauss_generator import GaussGenerator
-from src.simulator.generators.exponential_generator import ExponentialGenerator
+from simulator.src.common.Queue.interarrival_queue import InterarrivalQueue
+from simulator.src.common.patient import Patient
+from simulator.src.simulator.generators.gauss_generator import GaussGenerator
+from simulator.src.simulator.generators.exponential_generator import ExponentialGenerator
 
 class TestWaitingQueue(unittest.TestCase):
     

@@ -1,5 +1,5 @@
 import unittest
-from src.common.Queue.my_priority_queue import MyPriorityQueue
+from simulator.src.common.Queue.my_priority_queue import MyPriorityQueue
 
 class TestMyPriorityQueue(unittest.TestCase):
     

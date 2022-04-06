@@ -1,6 +1,6 @@
 import unittest
-from src.common.therapy_patient import TherapyPatient
-from src.simulator.generators.gauss_generator import GaussGenerator
+from simulator.src.common.therapy_patient import TherapyPatient
+from simulator.src.simulator.generators.gauss_generator import GaussGenerator
 
 
 class TestTherapyPatient(unittest.TestCase):

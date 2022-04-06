@@ -1,8 +1,7 @@
-import imp
 import unittest
-from src.common.therapy_patient import TherapyPatient
-from src.simulator.generators.gauss_generator import GaussGenerator
-from src.common.Queue.therapy_queue import TherapyQueue
+from simulator.src.common.therapy_patient import TherapyPatient
+from simulator.src.simulator.generators.gauss_generator import GaussGenerator
+from simulator.src.common.Queue.therapy_queue import TherapyQueue
 
 class TestTherapyQueue(unittest.TestCase):
 
