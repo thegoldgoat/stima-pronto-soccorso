@@ -1,4 +1,6 @@
 from .generator import Generator
+import numpy as np
+from math import floor
 
 
 class GaussGenerator(Generator):
@@ -9,4 +11,5 @@ class GaussGenerator(Generator):
 
     def generate_sample(self):
         # TODO: to implement
-        return 12345
+        # value can't be less than zero
+        return floor(max(1, np.random.default_rng().normal(self.average, self.variance)))

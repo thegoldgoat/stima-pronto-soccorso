@@ -1,5 +1,6 @@
 from .generator import Generator
 import numpy as np
+from math import ceil
 
 
 class ExponentialGenerator(Generator):
@@ -9,4 +10,4 @@ class ExponentialGenerator(Generator):
 
     # TODO: Implement ourselves (?)
     def generate_sample(self):
-        return np.random.default_rng().exponential(self.rate)
+        return ceil(np.random.default_rng().exponential(self.rate))

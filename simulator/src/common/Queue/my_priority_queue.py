@@ -24,3 +24,6 @@ class MyPriorityQueue:
 
     def get_min(self):
         return self.heap[0]
+
+    def is_empty(self):
+        return len(self.heap) == 0
