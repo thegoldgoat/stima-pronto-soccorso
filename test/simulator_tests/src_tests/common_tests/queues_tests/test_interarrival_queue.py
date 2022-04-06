@@ -1,9 +1,6 @@
 from copy import deepcopy
 import unittest
 from simulator.src.common.Queue.interarrival_queue import InterarrivalQueue
-from simulator.src.common.patient import Patient
-from simulator.src.simulator.generators.gauss_generator import GaussGenerator
-from simulator.src.simulator.generators.exponential_generator import ExponentialGenerator
 
 class TestWaitingQueue(unittest.TestCase):
     
@@ -17,14 +14,14 @@ class TestWaitingQueue(unittest.TestCase):
             for t in self.x.samples[i+1:]:
                 self.x.samples[i][1] <= t[1]
     
-    def test_peak(self):
+    def test_peek(self):
         
         min = self.x.samples[0]
         for x in self.x.samples:
             if x[1] < min[1]:
                 min = x    
 
-        self.assertEqual(self.x.peak(), min)
+        self.assertEqual(self.x.peek(), min)
     
     def test_pop_regenerate_decrement_others(self):
         
@@ -41,7 +38,20 @@ class TestWaitingQueue(unittest.TestCase):
         
         for i in range(0,3):
             for t in self.x.samples[i+1:]:
-                self.x.samples[i][1] <= t[1]      
+                self.x.samples[i][1] <= t[1]
+    
+    def test_decrement_interarrive(self):
         
+        temp = []
+        for sample in self.x.samples:
+            temp.append(sample[1])
+        
+        self.x.decrement_interarrive(1)
+        
+        index = 0;
+        for sample in self.x.samples:
+            self.assertEqual(sample[1], temp[index] - 1)
+            index += 1
+         
 if __name__ == '__main__':
     unittest.main()

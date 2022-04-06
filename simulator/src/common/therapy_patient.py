@@ -1,4 +1,4 @@
-from src.common.patient import Patient
+from simulator.src.common.patient import Patient
 
 
 class TherapyPatient(Patient):

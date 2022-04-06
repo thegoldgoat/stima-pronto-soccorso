@@ -1,4 +1,4 @@
-from .generator import Generator
+from simulator.src.simulator.generators.generator import Generator
 import numpy as np
 from math import floor
 

@@ -1,5 +1,5 @@
-from src.common.therapy_patient import TherapyPatient
-from .my_priority_queue import MyPriorityQueue
+from simulator.src.common.therapy_patient import TherapyPatient
+from simulator.src.common.Queue.my_priority_queue import MyPriorityQueue
 
 
 class TherapyQueue():

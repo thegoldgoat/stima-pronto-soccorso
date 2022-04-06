@@ -1,6 +1,6 @@
-from src.simulator.generators.exponential_generator import ExponentialGenerator
+from simulator.src.simulator.generators.exponential_generator import ExponentialGenerator
 
-import src.common.ColorCode.color_constants as color_constants
+import simulator.src.common.ColorCode.color_constants as color_constants
 
 
 class InterarrivalQueue:

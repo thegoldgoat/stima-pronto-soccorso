@@ -3,15 +3,14 @@ from datetime import datetime
 from threading import Lock
 from typing import Dict, List
 
-from src.simulator.simulator import Simulator
-from src.common.therapy_patient import TherapyPatient
-from src.common.Queue.therapy_queue import TherapyQueue
-from src.common.logging.logger import createLogginWithName
-from src.common.patient import Patient
-from src.common.Queue.waiting_queue import WaitingQueue
-
-from src.common.Models.simulation_model import SimulationModel
-from src.common.Models.esteem_model import EsteemModel
+from simulator.src.simulator.simulator import Simulator
+from simulator.src.common.therapy_patient import TherapyPatient
+from simulator.src.common.Queue.therapy_queue import TherapyQueue
+from simulator.src.common.logging.logger import createLogginWithName
+from simulator.src.common.patient import Patient
+from simulator.src.common.Queue.waiting_queue import WaitingQueue
+from simulator.src.common.Models.simulation_model import SimulationModel
+from simulator.src.common.Models.esteem_model import EsteemModel
 
 logger = createLogginWithName('SimulationManager')
 

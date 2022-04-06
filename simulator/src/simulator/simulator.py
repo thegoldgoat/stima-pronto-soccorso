@@ -1,12 +1,10 @@
-from src.common.Queue.interarrival_queue import InterarrivalQueue
-from src.common.patient import Patient
-from src.common.therapy_patient import TherapyPatient
-from src.simulator.generators.exponential_generator import ExponentialGenerator
-from src.common.Queue.waiting_queue import WaitingQueue
-from src.common.Queue.therapy_queue import TherapyQueue
-from src.common.ColorCode.color_constants import COLOR_GAUSSIANS, COLOR_LEAVE
-
-from src.common.logging.logger import createLogginWithName
+from simulator.src.common.Queue.interarrival_queue import InterarrivalQueue
+from simulator.src.common.patient import Patient
+from simulator.src.common.therapy_patient import TherapyPatient
+from simulator.src.common.Queue.waiting_queue import WaitingQueue
+from simulator.src.common.Queue.therapy_queue import TherapyQueue
+from simulator.src.common.ColorCode.color_constants import COLOR_GAUSSIANS, COLOR_LEAVE
+from simulator.src.common.logging.logger import createLogginWithName
 
 logger = createLogginWithName('Simulator')
 

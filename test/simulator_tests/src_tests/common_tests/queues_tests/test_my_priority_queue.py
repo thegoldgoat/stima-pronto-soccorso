@@ -55,6 +55,11 @@ class TestMyPriorityQueue(unittest.TestCase):
         self.assertEqual(self.y.get_min(), 3)
         self.assertEqual(self.z.get_min(), 0)
         
+    def test_is_empty(self):
+        
+        self.assertTrue(self.x.is_empty())
+        self.assertFalse(self.y.is_empty())
+        self.assertFalse(self.z.is_empty())
 
 if __name__ == '__main__':
     unittest.main()

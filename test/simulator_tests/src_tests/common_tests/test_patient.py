@@ -6,13 +6,41 @@ from simulator.src.simulator.generators.exponential_generator import Exponential
 class TestPatient(unittest.TestCase):
     
     def setUp(self):
+        
         self.patient1 = Patient('0000', GaussGenerator(1, 1), ExponentialGenerator(0.5), 2, 3600)
         self.patient2 = Patient('0001', GaussGenerator(2, 2), ExponentialGenerator(3), 1, 10800)
         self.patient3 = Patient('0002', GaussGenerator(1.5, 1), ExponentialGenerator(2), 2, 9000)
-        self.patient1.generate_all()
-        self.patient2.generate_all()
-        self.patient3.generate_all()
+    
+    def test_generate_leave(self):
         
+        self.patient1.generate_leave()
+        self.assertIsNotNone(self.patient1.leave_time)
+        
+    def test_generate_therapy(self):
+        
+        self.patient1.generate_therapy()
+        self.assertIsNotNone(self.patient1.therapy_time)
+        
+    def test_generate_all(self):
+        
+        self.patient1.generate_all()
+        self.assertIsNotNone(self.patient1.leave_time)
+        self.assertIsNotNone(self.patient1.leave_time)
+        
+    def test_decrement_leave_time(self):
+        
+        self.patient1.generate_leave()
+        temp = self.patient1.leave_time;
+        self.patient1.decrement_leave_time(1)
+        self.assertEqual(self.patient1.leave_time, temp - 1)
+        
+    def test_decrement_therapy_time(self):
+        
+        self.patient1.generate_therapy()
+        temp = self.patient1.therapy_time;
+        self.patient1.decrement_therapy_time(1)
+        self.assertEqual(self.patient1.therapy_time, temp - 1)
+     
     def test_it(self):
         
         self.assertFalse(self.patient1.__lt__(self.patient2))

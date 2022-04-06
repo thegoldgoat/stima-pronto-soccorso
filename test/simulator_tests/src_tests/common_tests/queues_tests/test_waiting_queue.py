@@ -14,12 +14,12 @@ class TestWaitingQueue(unittest.TestCase):
         self.patient3 = Patient('0002', GaussGenerator(1, 1.3), ExponentialGenerator(2), 2, 5000)
         self.patient4 = Patient('0003', GaussGenerator(3, 1), ExponentialGenerator(3), 4, 2000)
         self.patient5 = Patient('0004', GaussGenerator(1, 2), ExponentialGenerator(3), 0, 3000)
-        self.x.push(self.patient1)
-        self.x.push(self.patient2)
-        self.x.push(self.patient3)
         
     def test_push(self):
         
+        self.x.push(self.patient1)
+        self.x.push(self.patient2)
+        self.x.push(self.patient3)
         self.assertEqual(id(self.x.priority_queues[1].heap[0]), id(self.patient1))
         self.assertEqual(id(self.x.priority_queues[1].heap[1]), id(self.patient2))
         self.assertEqual(id(self.x.priority_queues[2].heap[0]), id(self.patient3))
@@ -27,8 +27,18 @@ class TestWaitingQueue(unittest.TestCase):
         with self.assertRaises(IndexError):
             self.x.push(self.patient4)
     
+    def test_pop(self):
+        
+        self.x.push(self.patient1)
+        self.x.push(self.patient2)
+        self.x.push(self.patient3)
+        self.assertTrue(self.patient1, self.x.pop())
+    
     def test_get_patients_count(self):
         
+        self.x.push(self.patient1)
+        self.x.push(self.patient2)
+        self.x.push(self.patient3)
         self.assertEqual(self.x.get_patients_count(), 3)
         self.x.push(self.patient5)
         self.assertEqual(self.x.get_patients_count(), 4)
