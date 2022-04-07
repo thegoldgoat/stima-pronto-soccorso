@@ -15,7 +15,7 @@ import math
 
 logger = createLogginWithName('Main', logging.INFO)
 
-N = 10000
+N = 100
 
 
 def normalizeTime(time: datetime):

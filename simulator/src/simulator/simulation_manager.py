@@ -9,7 +9,6 @@ from src.common.Queue.therapy_queue import TherapyQueue
 from src.common.logging.logger import createLogginWithName
 from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
-
 from src.common.Models.simulation_model import SimulationModel
 from src.common.Models.esteem_model import EsteemModel
 
