@@ -1,4 +1,4 @@
-from simulator.src.simulator.generators.generator import Generator
+from src.simulator.generators.generator import Generator
 
 
 class Patient():

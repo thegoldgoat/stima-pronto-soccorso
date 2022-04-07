@@ -1,21 +1,21 @@
 from datetime import datetime
 import logging
-from simulator.src.simulator.generators.gauss_generator import GaussGenerator
-from simulator.src.simulator.generators.exponential_generator import ExponentialGenerator
-from simulator.src.common.patient import Patient
-from simulator.src.common.Queue.waiting_queue import WaitingQueue
-from simulator.src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
-from simulator.src.common.logging.logger import createLogginWithName
-from simulator.src.simulator.simulation_manager import SimulationManager
+from src.simulator.generators.gauss_generator import GaussGenerator
+from src.simulator.generators.exponential_generator import ExponentialGenerator
+from src.common.patient import Patient
+from src.common.Queue.waiting_queue import WaitingQueue
+from src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
+from src.common.logging.logger import createLogginWithName
+from src.simulator.simulation_manager import SimulationManager
 
 import mongoengine
-from simulator.src.common.Models.waiting_patient_model import WaitingPatientModel
-from simulator.src.common.Models.therapy_patient_model import TherapyPatientModel
+from src.common.Models.waiting_patient_model import WaitingPatientModel
+from src.common.Models.therapy_patient_model import TherapyPatientModel
 import math
 
 logger = createLogginWithName('Main', logging.INFO)
 
-N = 10000
+N = 100
 
 
 def normalizeTime(time: datetime):

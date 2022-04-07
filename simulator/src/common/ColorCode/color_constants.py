@@ -1,5 +1,5 @@
-from simulator.src.simulator.generators.exponential_generator import ExponentialGenerator
-from simulator.src.simulator.generators.gauss_generator import GaussGenerator
+from src.simulator.generators.exponential_generator import ExponentialGenerator
+from src.simulator.generators.gauss_generator import GaussGenerator
 
 COLOR_RED = 0
 COLOR_YELLOW = 1
