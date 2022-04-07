@@ -1,5 +1,5 @@
-from simulator.src.common.patient import Patient
-from simulator.src.common.Queue.my_priority_queue import MyPriorityQueue
+from src.common.patient import Patient
+from src.common.Queue.my_priority_queue import MyPriorityQueue
 
 
 class WaitingQueue():
