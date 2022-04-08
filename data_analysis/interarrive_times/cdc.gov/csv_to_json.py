@@ -36,10 +36,13 @@ def main():
                 output_dict['waittime'] = line['WAITTIME']
 
                 # 2015 does not contain
-                if year == 2017:
+                if year == 2016 or year == 2017:
                     output_dict['visitlength'] = -1
                 else:
-                    output_dict['visitlength'] = line['LOV']
+                    lov = line['LOV']
+                    if lov == '-9':
+                        lov = -1
+                    output_dict['visitlength'] = lov
 
                 output_list.append(output_dict)
 
