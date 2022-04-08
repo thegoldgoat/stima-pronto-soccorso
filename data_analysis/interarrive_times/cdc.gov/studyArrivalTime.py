@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 from scipy.stats import poisson
 import numpy as np
 
+INPUT_JSON_FILE = 'output/data.json'
+
 """
 Lo studio conta quanti arrivi ci sono in una determinata ora (o in un periodo di tempo) per ognuno dei giorni*.
 
@@ -25,7 +27,8 @@ def meanSquaredError(real_x_values: list, real_y_values: list, theoric_x_values:
     # order the real values using a dict (becuase I have to keep the match between the x and y lists)
     index = 0
     for real_x_value in real_x_values:
-        real_values[real_x_value] = real_y_values[index] # * total_occurrences  # denormalize with total_occurrences
+        # * total_occurrences  # denormalize with total_occurrences
+        real_values[real_x_value] = real_y_values[index]
         index += 1
 
     # Fill the dict with zeros where I don't have values
@@ -36,7 +39,8 @@ def meanSquaredError(real_x_values: list, real_y_values: list, theoric_x_values:
     # order the theoric values using a dict (should be already ordered tbh)
     index = 0
     for theoric_x_value in theoric_x_values:
-        theoric_values[theoric_x_value] = theoric_y_values[index] # * total_occurrences  # denormalize with total_occurrences
+        # * total_occurrences  # denormalize with total_occurrences
+        theoric_values[theoric_x_value] = theoric_y_values[index]
         index += 1
 
     if len(real_values) != len(theoric_values):
@@ -48,23 +52,13 @@ def meanSquaredError(real_x_values: list, real_y_values: list, theoric_x_values:
     for i in range(1, len(real_values)+1):
         squaredSum += pow(real_values[i] - theoric_values[i], 2)
 
-    return round(squaredSum/len(real_values),6)
+    return round(squaredSum/len(real_values), 6)
 
 
 def load():
     """ Load 5 years data """
-    datas = []
-    with open("2015/exportEsiTime2015.json") as infile:
-        datas.extend(json.loads(infile.read()))
-    with open("2016/exportEsiTime2016.json") as infile:
-        datas.extend(json.loads(infile.read()))
-    with open("2017/exportEsiTime2017.json") as infile:
-        datas.extend(json.loads(infile.read()))
-    with open("2018/exportEsiTime2018.json") as infile:
-        datas.extend(json.loads(infile.read()))
-    with open("2019/exportEsiTime2019.json") as infile:
-        datas.extend(json.loads(infile.read()))
-    return datas
+    with open(INPUT_JSON_FILE, 'r') as infile:
+        return json.loads(infile.read())
 
 
 def analyze(datas, esi, hour, hour_interval=0):
@@ -72,10 +66,10 @@ def analyze(datas, esi, hour, hour_interval=0):
 
     # For each arrival: check the day he's arrived and increment the number of patients that arrived in the emergency room
     # the same day at the same hour
-    ## Here I don't have all the day information (dd/mm/yyyy) but only the month and the day of the week so
-    ## with "a day" I mean the same weekday of that month
+    # Here I don't have all the day information (dd/mm/yyyy) but only the month and the day of the week so
+    #  with "a day" I mean the same weekday of that month
 
-    # Here I count on each day, at that hour, how many people arrived    
+    # Here I count on each day, at that hour, how many people arrived
     for data in datas:
         try:
             if int(data['arrivalhour']) >= hour and int(data['arrivalhour']) < hour + hour_interval and int(data['esi']) == esi:
@@ -115,12 +109,12 @@ def plot(x_values, y_values, esi, hour, hour_interval):
     avg = 0
     total_occurrences = 0
     sample_number = 0
-    
+
     # Calculate the average and the sum of all values on y axis to normalize the plot
     for i in range(0, len(x_values)):
         sample_number += x_values[i] * y_values[i]
         total_occurrences += y_values[i]
-    avg = round(sample_number/total_occurrences,3)
+    avg = round(sample_number/total_occurrences, 3)
 
     # normalize y_values with 1
     for i in range(0, len(y_values)):
@@ -138,7 +132,8 @@ def plot(x_values, y_values, esi, hour, hour_interval):
     plt.plot(poisson_x_values, poisson_y_values, 'bs')
 
     # get the mse (with Poisson as theoric distribution)
-    mse = meanSquaredError(x_values, y_values, poisson_x_values, poisson_y_values)
+    mse = meanSquaredError(
+        x_values, y_values, poisson_x_values, poisson_y_values)
     total_mse += mse
 
     title = "Arrivals between {}:00 and {}:00 with ESI {}\n".format(
@@ -159,7 +154,7 @@ def plot(x_values, y_values, esi, hour, hour_interval):
 
 if __name__ == "__main__":
     datas = load()
-    hour_intervals = [1,2,3,4,6,8,12,24]
+    hour_intervals = [1, 2, 3, 4, 6, 8, 12, 24]
     for hour_interval in hour_intervals:
         for esi in esi_values:
             for hour in range(0, 24, hour_interval):
