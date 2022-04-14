@@ -143,13 +143,23 @@ def plot(x_values, y_values, esi, hour, hour_interval):
             sample_number, avg, mse)
     plt.title(title)
 
-    if not os.path.exists("output"):
-        os.mkdir("output")
-    if not os.path.exists("output/group{}hours".format(hour_interval)):
-        os.mkdir("output/group{}hours".format(hour_interval))
+    BASE_BASE_OUTPUT = "output"
+    if not os.path.exists(BASE_BASE_OUTPUT):
+        os.mkdir(BASE_BASE_OUTPUT)
+
+    BASE_OUTPUT_FOLDER = BASE_BASE_OUTPUT + "/interarrive"
+
+    if not os.path.exists(BASE_OUTPUT_FOLDER):
+        os.mkdir(BASE_OUTPUT_FOLDER)
+
+    GROUP_FOLDER = BASE_OUTPUT_FOLDER + \
+        "/group_by_{}_hours".format(f'{hour_interval:02}')
+
+    if not os.path.exists(GROUP_FOLDER):
+        os.mkdir(GROUP_FOLDER)
 
     plt.savefig(
-        'output/group{}hours/esi{}_h{}.png'.format(hour_interval, esi, f'{hour:02}'))
+        GROUP_FOLDER + '/esi{}_h_{}.png'.format(esi, f'{hour:02}'))
 
 
 if __name__ == "__main__":
