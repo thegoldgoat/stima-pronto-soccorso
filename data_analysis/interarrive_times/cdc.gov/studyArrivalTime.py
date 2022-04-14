@@ -74,7 +74,7 @@ def analyze(datas, esi, hour, hour_interval=0):
         try:
             if int(data['arrivalhour']) >= hour and int(data['arrivalhour']) < hour + hour_interval and int(data['esi']) == esi:
                 key = str(data['year']) + "." + data['arrivalmonth'] + "." + \
-                    data['arrivalday'] + "." + data['arrivalhour']
+                    data['arrivalday']
                 if key in arrivals:
                     arrivals[key] += 1
                 else:
