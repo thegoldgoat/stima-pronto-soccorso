@@ -7,8 +7,10 @@ from constants import ESIS, DAYS, HOUR_BINS
 
 def aggregate(input_data):
     results = dict()
+    arrival_count = dict()
 
     for esi in ESIS:
+        arrival_count[esi] = 0
         results[esi] = dict()
 
         for hour_bin in HOUR_BINS:
@@ -19,6 +21,14 @@ def aggregate(input_data):
         arrivalhour_bin = row['arrivalhour_bin']
 
         results[esi][arrivalhour_bin] += 1
+        arrival_count[esi] += 1
+
+    arrival_average = {esi: arr_count / len(HOUR_BINS) for esi,
+                       arr_count in arrival_count.items()}
+
+    for esi, hours_dict in results.items():
+        for key in hours_dict.keys():
+            hours_dict[key] -= arrival_average[esi]
 
     return results
 
@@ -43,7 +53,8 @@ def plot_results(results):
         plt.stem(x_values, y_values)
         plt.xlabel("Time intervals")
         plt.ylabel("Arrivals count")
-        plt.title('Arrival count for ESI={}/5 ($N={}$)'.format(esi, sum(y_values)))
+        plt.title(
+            'Arrival count for ESI={}/5 in respect to the average'.format(esi, sum(y_values)))
 
         plt.plot(x_values, y_values, color='blue')
 

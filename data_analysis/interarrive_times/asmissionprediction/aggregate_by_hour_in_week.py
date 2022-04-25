@@ -7,8 +7,10 @@ from constants import ESIS, DAYS, HOUR_BINS
 
 def aggregate(input_data):
     results = dict()
+    arrival_count = dict()
 
     for esi in ESIS:
+        arrival_count[esi] = 0
         results[esi] = dict()
 
         for day in DAYS:
@@ -22,7 +24,19 @@ def aggregate(input_data):
         arrivalday = row['arrivalday']
         arrivalhour_bin = row['arrivalhour_bin']
 
+        arrival_count[esi] += 1
         results[esi][arrivalday][arrivalhour_bin] += 1
+
+    average_arrive_count_in_hour_interval = dict()
+
+    for esi, arr_count in arrival_count.items():
+        average_arrive_count_in_hour_interval[esi] = arr_count / \
+            (len(DAYS) * len(HOUR_BINS))
+
+    for esi, days_dict in results.items():
+        for hours_dict in days_dict.values():
+            for hour_interval_keys in hours_dict.keys():
+                hours_dict[hour_interval_keys] -= average_arrive_count_in_hour_interval[esi]
 
     return results
 
@@ -60,7 +74,7 @@ def plot_results(results):
 
         ax.set_ylabel('Number of arrivals', fontsize=20)
         ax.set_title(
-            f'Arrivals divided by day of the week and hours intervals for ESI={esi}/5', fontsize=30)
+            f'Arrivals divided by day of the week and hours intervals for ESI={esi}/5 in respect to the average', fontsize=30)
 
         x = [v + single_bar_width * 3 for v in x_values_bar_base]
         ax.set_xticks(x)
