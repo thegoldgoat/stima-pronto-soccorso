@@ -24,3 +24,10 @@ Two plotting functions are implemented:
 
 1. `aggregate_by_hour.py`: aggregates the data with the hour intervals. Output can be found in `output/hour`
 2. `aggregate_by_hour_in_week.py`: aggregates the data with the hour intervals in the different days in the week. Output can be found in `output/hour_in_week`
+
+### Running
+
+To run the scripts you need to call them as module from the project root folder with the following commands:
+```
+python3 -m data_analysis.interarrive_times.asmissionprediction.aggregate_by_month [YEAR_OF_DATA]
+```

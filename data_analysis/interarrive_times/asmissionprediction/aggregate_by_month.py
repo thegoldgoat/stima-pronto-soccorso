@@ -1,8 +1,21 @@
 import os
 import csv
 from pathlib import Path
+import mongoengine
+from simulator.src.common.Models.month_arrivals_model import MonthArrivals
+from .constants import ESIS, MONTHS
+import sys
 
-from constants import ESIS, MONTHS
+data_year = -1
+
+
+def read_args():
+    global data_year
+    if(len(sys.argv) <= 1):
+        print("Please specify input data year by argument")
+        exit(1)
+    else:
+        data_year = int(sys.argv[1])
 
 
 def aggregate(input_data):
@@ -50,7 +63,19 @@ def plot_results(results):
         plt.savefig(OUTPUT_DIR_PATH / 'ESI-{}.png'.format(esi))
 
 
+def store_results(results):
+    for esi, months_dict in results.items():
+        if (esi != "NA"):
+            for month_name, arrivals_count in months_dict.items():
+                MonthArrivals(
+                    emergency_code=esi, month=MONTHS[month_name], year=data_year, arrivals=arrivals_count).save()
+
+
 if __name__ == '__main__':
+    read_args()
+    print("Plotting data and saving it in db for year {}".format(data_year))
+    mongoengine.connect("stima-pronto-soccorso")
     with open(Path(__file__).parent / 'input' / 'input.csv') as csvfile:
         results = aggregate(csv.DictReader(csvfile))
         plot_results(results)
+        store_results(results)

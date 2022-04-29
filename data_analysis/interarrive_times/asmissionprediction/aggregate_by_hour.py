@@ -60,12 +60,7 @@ def plot_results(results):
         plt.savefig(OUTPUT_DIR_PATH / 'ESI-{}.png'.format(esi))
 
 
-def store_results(results):
-    pass
-
-
 if __name__ == '__main__':
     with open(Path(__file__).parent / 'input' / 'input.csv') as csvfile:
         results = aggregate(csv.DictReader(csvfile))
         plot_results(results)
-        store_results(results)
