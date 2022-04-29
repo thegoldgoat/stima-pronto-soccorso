@@ -11,8 +11,8 @@ def aggregate(input_data):
     for esi in ESIS:
         results[esi] = dict()
 
-        for months in MONTHS:
-            results[esi][months] = 0
+        for month, month_value in MONTHS.items():
+            results[esi][month] = 0
 
     for row in input_data:
         esi = row['esi']
