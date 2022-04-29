@@ -2,7 +2,7 @@ from enum import Enum
 import re
 import mongoengine
 
-class MonthArrivals(mongoengine.Document):
+class MonthArrivalsModel(mongoengine.Document):
     emergency_code = mongoengine.IntField(required=True)
     month = mongoengine.IntField(required=True)
     year = mongoengine.IntField(required=True)

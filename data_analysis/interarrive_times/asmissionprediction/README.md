@@ -31,3 +31,6 @@ To run the scripts you need to call them as module from the project root folder 
 ```
 python3 -m data_analysis.interarrive_times.asmissionprediction.aggregate_by_month [YEAR_OF_DATA]
 ```
+```
+python3 -m data_analysis.interarrive_times.asmissionprediction.aggregate_by_hour_in_week [YEAR_OF_DATA]
+```

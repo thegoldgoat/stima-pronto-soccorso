@@ -2,7 +2,7 @@ import os
 import csv
 from pathlib import Path
 import mongoengine
-from simulator.src.common.Models.month_arrivals_model import MonthArrivals
+from simulator.src.common.Models.month_arrivals_model import MonthArrivalsModel
 from .constants import ESIS, MONTHS
 import sys
 
@@ -67,7 +67,7 @@ def store_results(results):
     for esi, months_dict in results.items():
         if (esi != "NA"):
             for month_name, arrivals_count in months_dict.items():
-                MonthArrivals(
+                MonthArrivalsModel(
                     emergency_code=esi, month=MONTHS[month_name], year=data_year, arrivals=arrivals_count).save()
 
 
@@ -77,5 +77,5 @@ if __name__ == '__main__':
     mongoengine.connect("stima-pronto-soccorso")
     with open(Path(__file__).parent / 'input' / 'input.csv') as csvfile:
         results = aggregate(csv.DictReader(csvfile))
-        plot_results(results)
         store_results(results)
+        plot_results(results)

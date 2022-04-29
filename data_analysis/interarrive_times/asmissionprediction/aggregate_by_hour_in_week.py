@@ -1,8 +1,21 @@
 import os
 import csv
 from pathlib import Path
+import mongoengine
+from simulator.src.common.Models.hour_arrivals_model import HourArrivalsModel
+from .constants import ESIS, DAYS, HOUR_BINS
+import sys
 
-from constants import ESIS, DAYS, HOUR_BINS
+data_year = -1
+
+
+def read_args():
+    global data_year
+    if(len(sys.argv) <= 1):
+        print("Please specify input data year by argument")
+        exit(1)
+    else:
+        data_year = int(sys.argv[1])
 
 
 def aggregate(input_data):
@@ -78,7 +91,8 @@ def plot_results(results):
 
         x = [v + single_bar_width * 3 for v in x_values_bar_base]
         ax.set_xticks(x)
-        ax.set_xticklabels([day for day, day_value in DAYS.items()], fontsize=30)
+        ax.set_xticklabels(
+            [day for day, day_value in DAYS.items()], fontsize=30)
         ax.legend(fontsize=30)
 
         # for rect in rects:
@@ -89,7 +103,20 @@ def plot_results(results):
         plt.savefig(OUTPUT_DIR_PATH / f"ESI-{esi}.png")
 
 
+def store_results(results):
+    for esi, days_dict in results.items():
+        if (esi != "NA"):
+            for day_name, intervals in days_dict.items():
+                for hours_interval, arrivals_count in intervals.items():
+                    HourArrivalsModel(emergency_code=esi, year=data_year,
+                                      day_in_week=DAYS[day_name], hours_interval=hours_interval, arrivals_compared_to_average=arrivals_count).save()
+
+
 if __name__ == '__main__':
+    read_args()
+    print("Plotting data and saving it in db for year {}".format(data_year))
+    mongoengine.connect("stima-pronto-soccorso")
     with open(Path(__file__).parent / 'input' / 'input.csv') as csvfile:
         results = aggregate(csv.DictReader(csvfile))
+        store_results(results)
         plot_results(results)
