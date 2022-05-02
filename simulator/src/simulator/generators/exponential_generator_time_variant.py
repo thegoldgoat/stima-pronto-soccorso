@@ -13,9 +13,12 @@ def get_hours_from_monday(target_datetime: datetime) -> WeekTime:
     )
 
 
+RATES_COUNT_IN_WEEK = 7 * 7
+
+
 class ExponentialGeneratorTimeVariant():
     def __init__(self, rates: List[ExponentialRate]) -> None:
-        if len(rates) != 6 * 7:
+        if len(rates) != RATES_COUNT_IN_WEEK:
             raise Exception(
                 "Exponential generator didn't get the correct amount of rates for the entire week")
         # Rates must be already ordered by day and hour_interval
@@ -24,9 +27,6 @@ class ExponentialGeneratorTimeVariant():
 
     def _find_index_interval(self, current_datetime: datetime):
         current_hours_from_monday = get_hours_from_monday(current_datetime)
-
-        if self.rates[0].time_begin > current_hours_from_monday:
-            return len(self.rates) - 1
 
         for index, rate in enumerate(self.rates):
             if rate.time_begin > current_hours_from_monday:
@@ -51,11 +51,11 @@ class ExponentialGeneratorTimeVariant():
             )
 
             if updated_time_from_monday.weekday != current_time_from_monday.weekday or \
-                    updated_time_from_monday > self.rates[rate_index].time_end():
+                    updated_time_from_monday > self.rates[rate_index].time_end:
                 # The sample overflowed the time interval assigned to this exponential rate
                 # Update return_sample_value and redo sample considering new rate
 
-                minutes_difference = self.rates[rate_index].time_end().difference(
+                minutes_difference = self.rates[rate_index].time_end.difference(
                     current_time_from_monday)
 
                 if minutes_difference < 0:
