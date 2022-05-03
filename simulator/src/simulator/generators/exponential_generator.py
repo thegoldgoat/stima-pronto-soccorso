@@ -1,6 +1,10 @@
 from src.simulator.generators.generator import Generator
-import numpy as np
-from math import ceil
+from random import expovariate
+
+
+def generate_exponential(rate):
+    # return - round(math.log(random.random())/rate)
+    return round(expovariate(rate))
 
 
 class ExponentialGenerator(Generator):
@@ -8,6 +12,5 @@ class ExponentialGenerator(Generator):
     def __init__(self, rate):
         self.rate = rate
 
-    # TODO: Implement ourselves (?)
     def generate_sample(self):
-        return ceil(np.random.default_rng().exponential(self.rate))
+        return round(expovariate(1 / self.rate))
