@@ -5,7 +5,17 @@
         <v-card-title> Display </v-card-title>
         <v-card-text>
           <v-skeleton-loader :loading="isLoading" height="300" type="card">
-            Content
+            <v-expansion-panels>
+              <v-expansion-panel
+                v-for="patientEsteem in esteems"
+                :key="patientEsteem.patient_id"
+              >
+                <v-expansion-panel-header>
+                  {{ patientEsteem.patient_id }}
+                </v-expansion-panel-header>
+                <v-expansion-panel-content> Content </v-expansion-panel-content>
+              </v-expansion-panel>
+            </v-expansion-panels>
           </v-skeleton-loader>
         </v-card-text>
       </v-card>
@@ -18,10 +28,12 @@ import { Component, Vue } from 'vue-property-decorator'
 import { manageError } from '@/functions/Errors'
 import { PatientEsteem } from '@/../restapi/src/types/PatientEsteem'
 
+type EsteemFromMonitor = PatientEsteem & { patient_id: string }
+
 @Component
 export default class DisplayPage extends Vue {
   isLoading = true
-  esteems: PatientEsteem[] = []
+  esteems: EsteemFromMonitor[] = []
 
   async updateDisplay() {
     this.isLoading = true
