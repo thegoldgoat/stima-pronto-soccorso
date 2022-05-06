@@ -3,7 +3,7 @@ from src.common.patient import Patient
 from src.common.therapy_patient import TherapyPatient
 from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Queue.therapy_queue import TherapyQueue
-from src.common.ColorCode.color_constants import COLOR_GAUSSIANS, COLOR_LEAVE
+from src.common.EsiCodes.esi_constants import ESI_GAUSSIANS, ESI_LEAVE
 from src.common.logging.logger import createLogginWithName
 
 logger = createLogginWithName('Simulator')
@@ -83,16 +83,16 @@ class Simulator():
 
         else:
             # Interarrive is minimum
-            logger.debug("Interarrive event: Color Code=%s",
+            logger.debug("Interarrive event: ESI Code=%d",
                          minimum_interarrive[0])
 
-            color_index = minimum_interarrive[0]
+            esi_code = minimum_interarrive[0]
             time_elapsed = minimum_interarrive[1]
 
             self.current_time += time_elapsed
 
-            new_patient = Patient("", COLOR_GAUSSIANS[color_index],
-                                  COLOR_LEAVE[color_index], color_index, self.current_time)
+            new_patient = Patient("", ESI_GAUSSIANS[esi_code-1],
+                                  ESI_LEAVE[esi_code-1], esi_code, self.current_time)
 
             new_patient.generate_leave()
 

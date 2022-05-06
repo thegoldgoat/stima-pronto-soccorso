@@ -1,16 +1,16 @@
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 
-import src.common.ColorCode.color_constants as color_constants
+import src.common.EsiCodes.esi_constants as esi_const
 
 
 class InterarrivalQueue:
     def __init__(self):
         self.generators = [ExponentialGenerator(
-            rate) for rate in color_constants.COLOR_RATES]
+            rate) for rate in esi_const.ESI_RATES]
 
         self.samples = [
-            [color_index, self.generators[color_index].generate_sample()]
-            for color_index in color_constants.COLORS
+            [esi_code, self.generators[esi_code - 1].generate_sample()]
+            for esi_code in esi_const.ESI_CODES
         ]
 
         self.reorder_samples()
@@ -24,7 +24,7 @@ class InterarrivalQueue:
 
     def pop_regenerate_decrement_others(self):
         # Return the minimum, update the sample that I do not return,
-        # regenerate the new sample for its color code
+        # regenerate the new sample for its esi code
         return_value = self.samples[0]
 
         # Pull
@@ -32,12 +32,12 @@ class InterarrivalQueue:
         self.samples = [[s[0], s[1] - decrement_amount]
                         for s in self.samples[1:]]
 
-        color_code_to_regenerate = return_value[0]
+        esi_code_to_regenerate = return_value[0]
 
         # Push
         self.samples.append([
-            color_code_to_regenerate,
-            self.generators[color_code_to_regenerate].generate_sample()
+            esi_code_to_regenerate,
+            self.generators[esi_code_to_regenerate - 1].generate_sample()
         ])
 
         self.reorder_samples()

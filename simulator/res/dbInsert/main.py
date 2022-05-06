@@ -3,37 +3,21 @@ import mongoengine
 from src.common.Models.patient_model import PatientModel
 from src.common.Models.waiting_patient_model import WaitingPatientModel
 from src.common.Models.therapy_patient_model import TherapyPatientModel
-from src.common.ColorCode import color_constants
+from src.common.EsiCodes import esi_constants
 
+num_of_waiting_patients = 3
 
 def insertPatients():
-    for i in range(1, 3):
-        patient = PatientModel().save()
-        WaitingPatientModel(
-            patient_id=patient,
-            arrival_time=datetime.now(),
-            emergency_code=color_constants.COLOR_RED,
-            average=3+i,
-            deviation=i
-        ).save()
-    for i in range(1, 3):
-        patient = PatientModel().save()
-        WaitingPatientModel(
-            patient_id=patient,
-            arrival_time=datetime.now(),
-            emergency_code=color_constants.COLOR_YELLOW,
-            average=2+i,
-            deviation=i
-        ).save()
-    for i in range(1, 3):
-        patient = PatientModel().save()
-        WaitingPatientModel(
-            patient_id=patient,
-            arrival_time=datetime.now(),
-            emergency_code=color_constants.COLOR_GREEN,
-            average=1,
-            deviation=i
-        ).save()
+    for esi in esi_constants.ESI_CODES:
+        for i in range(0, num_of_waiting_patients):
+            patient = PatientModel().save()
+            WaitingPatientModel(
+                patient_id=patient,
+                arrival_time=datetime.now(),
+                emergency_code=esi,
+                average=3+i,
+                deviation=1+i
+            ).save()
 
     patient = PatientModel().save()
     TherapyPatientModel(

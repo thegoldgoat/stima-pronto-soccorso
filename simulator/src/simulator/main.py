@@ -4,7 +4,7 @@ from src.simulator.generators.gauss_generator import GaussGenerator
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
-from src.common.ColorCode.color_constants import COLOR_GREEN, COLOR_YELLOW, COLOR_RED
+from src.common.EsiCodes.esi_constants import ESI_CODES
 from src.common.logging.logger import createLogginWithName
 from src.simulator.simulation_manager import SimulationManager
 
@@ -15,7 +15,7 @@ import math
 
 logger = createLogginWithName('Main', logging.INFO)
 
-N = 100
+N = 100000
 
 
 def normalizeTime(time: datetime):
@@ -25,7 +25,7 @@ def normalizeTime(time: datetime):
 
 def main():
     mongoengine.connect("stima-pronto-soccorso")
-    waiting_queues = WaitingQueue(3)
+    waiting_queues = WaitingQueue(len(ESI_CODES))
 
     for waiting_patient in WaitingPatientModel.objects:
         waiting_queues.push(
@@ -35,7 +35,7 @@ def main():
                                waiting_patient.deviation),
                 # TODO get from db when implemented in the model
                 ExponentialGenerator(1),
-                waiting_patient.emergency_code.value,
+                waiting_patient.emergency_code,
                 normalizeTime(waiting_patient.arrival_time)
             )
         )

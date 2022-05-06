@@ -12,6 +12,8 @@ from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Models.simulation_model import SimulationModel
 from src.common.Models.esteem_model import EsteemModel
 
+import os
+
 logger = createLogginWithName('SimulationManager')
 
 
@@ -82,6 +84,10 @@ class SimulationManager:
         '''
             Plots all the results of the simulation
         '''
+
+        if not os.path.exists(base_path):
+            os.makedirs(base_path)
+
         import matplotlib.pyplot as plt
 
         for patient_id, waiting_times in self.aggregated_results.items():

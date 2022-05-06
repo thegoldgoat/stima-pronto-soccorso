@@ -10,7 +10,7 @@ class WaitingQueue():
         priority_code = new_patient.emergency_code
 
         # Add new patient to the corresponding queue
-        self.priority_queues[priority_code].push(new_patient)
+        self.priority_queues[priority_code-1].push(new_patient)
 
     def pop(self) -> Patient:
         for priority_queue in self.priority_queues:
