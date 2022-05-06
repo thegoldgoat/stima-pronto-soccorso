@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+const decidedURL = process.env.API_URL || 'http://localhost:8000/'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -43,10 +45,9 @@ export default {
     '@nuxtjs/axios',
   ],
 
-  // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/',
+    baseURL: decidedURL,
+    browserBaseURL: decidedURL
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
