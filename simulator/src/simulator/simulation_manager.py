@@ -1,7 +1,9 @@
 from concurrent.futures import ThreadPoolExecutor, wait
 from datetime import datetime
+import logging
 from threading import Lock
 from typing import Dict, List
+from src.simulator.generators.exponential_generator_time_variant import ExponentialGeneratorTimeVariant
 
 from src.simulator.simulator import Simulator
 from src.common.therapy_patient import TherapyPatient
@@ -14,31 +16,39 @@ from src.common.Models.esteem_model import EsteemModel
 
 import os
 
-logger = createLogginWithName('SimulationManager')
+logger = createLogginWithName('SimulationManager', logging.ERROR)
 
 
 class SimulationManager:
     '''
-        Class that manages the simulations and aggregate the data
+        Class that manages the simulations and aggregates the data
     '''
 
-    def __init__(self, waiting_queues: WaitingQueue, therapy_patients_list: List[Patient], simulations_count: int):
+    def __init__(self, waiting_queues: WaitingQueue, therapy_patients_list: List[Patient], simulations_count: int, exponential_generators_time_variant: List[ExponentialGeneratorTimeVariant]):
         self._initial_waiting_queues = waiting_queues
         self._initial_therapy_patients_list = therapy_patients_list
         self._simulation_count = simulations_count
-
+        self._exponential_generators_time_variant = exponential_generators_time_variant
         self.aggregated_results = {}
-
         self.lock = Lock()
-
-    def run_all_simulation_sync(self):
+    
+    def _clone_current_datetime(self, current_datetime: datetime):
+        '''
+            Returns a copy of the current datetime.
+        '''
+        
+        return datetime(current_datetime.year, current_datetime.month, current_datetime.day, current_datetime.hour, current_datetime.minute)
+    
+    
+    def run_all_simulation_sync(self):      
+        current_datetime = datetime.now()  
         with ThreadPoolExecutor() as executor:
             my_futures = [executor.submit(
-                self._run_and_aggregate_single_simulation) for _ in range(self._simulation_count)]
+                self._run_and_aggregate_single_simulation, current_datetime) for _ in range(self._simulation_count)]
             wait(my_futures)
 
-    def _run_and_aggregate_single_simulation(self):
-        simulator_result = self._run_single_simulation()
+    def _run_and_aggregate_single_simulation(self, current_datetime: datetime):
+        simulator_result = self._run_single_simulation(current_datetime)
 
         self.lock.acquire()
         self._aggregate_single_result(simulator_result)
@@ -55,7 +65,7 @@ class SimulationManager:
                 else:
                     self.aggregated_results[patient_id][waiting_time] += 1
 
-    def _run_single_simulation(self):
+    def _run_single_simulation(self, current_datetime: datetime):
         logger.debug("Launching simulation preparation")
 
         waiting_queues_copy = self._initial_waiting_queues.create_copy_and_generate()
@@ -66,8 +76,10 @@ class SimulationManager:
             therapy_queue.push(TherapyPatient(therapy_patient.id,
                                               therapy_patient.therapy_generator
                                               ))
-
-        simulator = Simulator(waiting_queues_copy, therapy_queue)
+        
+        copy_of_current_datetime = self._clone_current_datetime(current_datetime)
+        
+        simulator = Simulator(waiting_queues_copy, therapy_queue, self._exponential_generators_time_variant, copy_of_current_datetime)
 
         try:
             result = simulator.simulate()
@@ -98,7 +110,7 @@ class SimulationManager:
 
             plt.clf()
             plt.stem(x_values, y_values, linefmt='blue', markerfmt=" ")
-            plt.xlabel("Waiting time")
+            plt.xlabel("Waiting time in minutes")
             plt.ylabel("Occurrences Percentage")
             plt.title(
                 f"Results for {self._simulation_count} simulations", fontsize=10)

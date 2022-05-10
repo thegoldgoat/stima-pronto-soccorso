@@ -1,3 +1,5 @@
+import logging
+from typing import List
 from src.common.Queue.interarrival_queue import InterarrivalQueue
 from src.common.patient import Patient
 from src.common.therapy_patient import TherapyPatient
@@ -5,15 +7,18 @@ from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Queue.therapy_queue import TherapyQueue
 from src.common.EsiCodes.esi_constants import ESI_GAUSSIANS, ESI_LEAVE
 from src.common.logging.logger import createLogginWithName
+from src.simulator.generators.exponential_generator_time_variant import ExponentialGeneratorTimeVariant
+from datetime import datetime, timedelta
+
 
 logger = createLogginWithName('Simulator')
 
-
 class Simulator():
-    def __init__(self, waiting_queues: WaitingQueue, therapy_state: TherapyQueue):
+    def __init__(self, waiting_queues: WaitingQueue, therapy_state: TherapyQueue, exponential_generators_time_variant: List[ExponentialGeneratorTimeVariant], current_datetime: datetime):
         self._waiting_queues = waiting_queues
         self._therapy_state = therapy_state
-        self._interarrive_state = InterarrivalQueue()
+        self._datetime_in_simulation = current_datetime
+        self._interarrive_state = InterarrivalQueue(exponential_generators_time_variant, current_datetime)
 
     def simulate(self):
         '''
@@ -25,7 +30,7 @@ class Simulator():
         self.current_time = 0
         self.result_dict = dict()
         self.total_initial_patients_in_queue = self._waiting_queues.get_patients_count()
-
+        
         self.moved_in_therapy_patients = 0
 
         self.iteration_count = 0
@@ -54,7 +59,6 @@ class Simulator():
             4. Update timing for each value in the waiting_queues, therapy_state, and
                 leave_time
         '''
-
         self.iteration_count += 1
 
         logger.debug("Iteration %s", self.iteration_count)
@@ -73,7 +77,9 @@ class Simulator():
             time_elapsed = minimum_therapy.therapy_time
 
             self.current_time += time_elapsed
-
+            # Update datetime of simulation
+            self._datetime_in_simulation += timedelta(seconds=time_elapsed*60)
+            
             self._therapy_state.pop()
 
             self._therapy_state.decrement_therapy_times(time_elapsed)
@@ -90,6 +96,7 @@ class Simulator():
             time_elapsed = minimum_interarrive[1]
 
             self.current_time += time_elapsed
+            self._datetime_in_simulation += timedelta(seconds=time_elapsed*60)
 
             new_patient = Patient("", ESI_GAUSSIANS[esi_code-1],
                                   ESI_LEAVE[esi_code-1], esi_code, self.current_time)
@@ -99,7 +106,8 @@ class Simulator():
             self._waiting_queues.push(new_patient)
 
             self._therapy_state.decrement_therapy_times(time_elapsed)
-            self._interarrive_state.pop_regenerate_decrement_others()
+            
+            self._interarrive_state.pop_regenerate_decrement_others(self._datetime_in_simulation)
 
     def _move_from_waiting_to_therapy(self):
         # Move one patient from the waiting queue to therapy

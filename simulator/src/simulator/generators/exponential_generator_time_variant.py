@@ -13,7 +13,7 @@ def get_hours_from_monday(target_datetime: datetime) -> WeekTime:
     )
 
 
-RATES_COUNT_IN_WEEK = 7 * 7
+RATES_COUNT_IN_WEEK = 7 * 6
 
 
 class ExponentialGeneratorTimeVariant():
@@ -60,7 +60,7 @@ class ExponentialGeneratorTimeVariant():
 
                 if minutes_difference < 0:
                     # A week overflow has occurred (e.g. current_time_from_monday = 23:50 at sunday and sample was 15 mins):
-                    # Ad a full week of minutes to this difference
+                    # Add a full week of minutes to this difference
                     minutes_difference += WEEKDAY_AMOUNT * HOURS_AMOUNT * MINUTES_AMOUNT
 
                 return_sample_value += minutes_difference

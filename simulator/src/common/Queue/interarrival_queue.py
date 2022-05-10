@@ -1,15 +1,15 @@
-from src.simulator.generators.exponential_generator import ExponentialGenerator
+from typing import List
+from src.simulator.generators.exponential_generator_time_variant import ExponentialGeneratorTimeVariant
+from datetime import datetime
 
 import src.common.EsiCodes.esi_constants as esi_const
 
-
 class InterarrivalQueue:
-    def __init__(self):
-        self.generators = [ExponentialGenerator(
-            rate) for rate in esi_const.ESI_RATES]
+    def __init__(self,  exponential_generators_time_variant: List[ExponentialGeneratorTimeVariant], current_datetime: datetime):
+        self.generators = exponential_generators_time_variant
 
         self.samples = [
-            [esi_code, self.generators[esi_code - 1].generate_sample()]
+            [esi_code, self.generators[esi_code - 1].generate_sample(current_datetime)]
             for esi_code in esi_const.ESI_CODES
         ]
 
@@ -22,7 +22,7 @@ class InterarrivalQueue:
         # Return the minimum
         return self.samples[0]
 
-    def pop_regenerate_decrement_others(self):
+    def pop_regenerate_decrement_others(self, datetime_in_simulation: datetime):
         # Return the minimum, update the sample that I do not return,
         # regenerate the new sample for its esi code
         return_value = self.samples[0]
@@ -37,7 +37,7 @@ class InterarrivalQueue:
         # Push
         self.samples.append([
             esi_code_to_regenerate,
-            self.generators[esi_code_to_regenerate - 1].generate_sample()
+            self.generators[esi_code_to_regenerate - 1].generate_sample(datetime_in_simulation)
         ])
 
         self.reorder_samples()
