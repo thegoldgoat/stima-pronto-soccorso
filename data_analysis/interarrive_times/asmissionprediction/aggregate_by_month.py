@@ -33,6 +33,16 @@ def aggregate(input_data):
 
         results[esi][arrivalmonth] += 1
 
+    for esi, months_dict in results.items():
+        month_index = 1
+        for month, y_value in months_dict.items():
+            if(month_index>=3 and month_index<=6):
+                months_dict[month] = y_value/4
+            else:
+                months_dict[month] = y_value/3
+                
+            month_index += 1
+    
     return results
 
 
