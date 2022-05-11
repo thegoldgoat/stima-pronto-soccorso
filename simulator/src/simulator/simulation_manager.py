@@ -13,6 +13,7 @@ from src.common.patient import Patient
 from src.common.Queue.waiting_queue import WaitingQueue
 from src.common.Models.simulation_model import SimulationModel
 from src.common.Models.esteem_model import EsteemModel
+from src.common.EsiCodes.esi_constants import THERAPY_SIZE
 
 import os
 
@@ -70,8 +71,8 @@ class SimulationManager:
 
         waiting_queues_copy = self._initial_waiting_queues.create_copy_and_generate()
 
-        therapy_queue = TherapyQueue(len(self._initial_therapy_patients_list))
-
+        therapy_queue = TherapyQueue(THERAPY_SIZE)
+        
         for therapy_patient in self._initial_therapy_patients_list:
             therapy_queue.push(TherapyPatient(therapy_patient.id,
                                               therapy_patient.therapy_generator

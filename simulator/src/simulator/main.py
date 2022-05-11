@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from calendar import monthrange
 import logging
 
+from src.simulator.generators.therapy_time_from_samples_generator import TherapyTimeFromSampleGenerator
+from src.common.Models.therapy_times_occurrences_model import TherapyTimesOccurrencesModel
 from src.common.Models.month_arrivals_model import MonthArrivalsModel
 from src.common.Models.hour_arrivals_model import HourArrivalsModel
 from src.common.week_time import WeekTime
@@ -22,7 +24,7 @@ import math
 
 logger = createLogginWithName('Main', logging.INFO)
 
-N = 1000000
+N = 100
 NUM_OF_MONTHS = 12
 NUM_OF_MONTHS_DATABASE = 40
 NUM_OF_DAYS_IN_WEEK = 7
@@ -117,16 +119,35 @@ def generate_exponential_generators_time_variant():
     
     return list_of_exponential_generators_time_variant
 
+def generate_therapy_times_generators():
+    """ 
+    Loads therapy times data from the database.
+    In the data I have the therapy times and their occurrences for each ESI.
+    Then passes the data to the generator.
+    """
+    generate_therapy_times_generators = {}
+    for esi in ESI_CODES:
+        therapy_times_occurrences_current_esi = []
+        for therapy_time_occurrences in TherapyTimesOccurrencesModel.objects(emergency_code=esi):
+            therapy_times_occurrences_current_esi.append([therapy_time_occurrences['therapy_time'],therapy_time_occurrences['occurrences']])
+
+        generate_therapy_times_generators[esi] = TherapyTimeFromSampleGenerator(therapy_times_occurrences_current_esi)
+        
+    return generate_therapy_times_generators
+        
+
 def main():
     mongoengine.connect("stima-pronto-soccorso")
     waiting_queues = WaitingQueue(len(ESI_CODES))
+
+    # Create the generators, one for esi, that will be passed to the patient with the correct esi
+    therapy_time_from_sample_generators = generate_therapy_times_generators()
 
     for waiting_patient in WaitingPatientModel.objects:
         waiting_queues.push(
             Patient(
                 str(waiting_patient.patient_id.pk),
-                GaussGenerator(waiting_patient.average,
-                               waiting_patient.deviation),
+                therapy_time_from_sample_generators[waiting_patient.emergency_code],
                 # TODO get from db when implemented in the model
                 ExponentialGenerator(1),
                 waiting_patient.emergency_code,
@@ -144,8 +165,7 @@ def main():
         therapy_patients_list.append(
             Patient(
                 str(therapy_patient.pk),
-                GaussGenerator(therapy_patient.average,
-                               therapy_patient.deviation),
+                therapy_time_from_sample_generators[therapy_patient.emergency_code],
                 # TODO get from db when implemented in the model
                 ExponentialGenerator(1),
                 None,

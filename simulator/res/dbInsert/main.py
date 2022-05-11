@@ -14,25 +14,21 @@ def insertPatients():
             WaitingPatientModel(
                 patient_id=patient,
                 arrival_time=datetime.now(),
-                emergency_code=esi,
-                average=3+i,
-                deviation=1+i
+                emergency_code=esi
             ).save()
 
     patient = PatientModel().save()
     TherapyPatientModel(
         patient_id=patient,
-        entry_time=datetime.now(),
-        average=2,
-        deviation=2
+        emergency_code=4,
+        entry_time=datetime.now()
     ).save()
 
     patient = PatientModel().save()
     TherapyPatientModel(
         patient_id=patient,
-        entry_time=datetime.now(),
-        average=1,
-        deviation=2
+        emergency_code=2,
+        entry_time=datetime.now()
     ).save()
 
 

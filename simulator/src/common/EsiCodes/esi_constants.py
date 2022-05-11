@@ -1,6 +1,7 @@
 from src.simulator.generators.exponential_generator import ExponentialGenerator
 from src.simulator.generators.gauss_generator import GaussGenerator
 
+THERAPY_SIZE = 7
 
 ESI_CODES = [1,2,3,4,5]
 
