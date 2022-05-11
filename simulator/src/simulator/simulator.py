@@ -99,7 +99,7 @@ class Simulator():
             self._datetime_in_simulation += timedelta(seconds=time_elapsed*60)
 
             new_patient = Patient("", ESI_GAUSSIANS[esi_code-1],
-                                  ESI_LEAVE[esi_code-1], esi_code, self.current_time)
+                                  ESI_LEAVE[esi_code-1], esi_code, self._datetime_in_simulation)
 
             new_patient.generate_leave()
 

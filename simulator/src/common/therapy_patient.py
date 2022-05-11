@@ -15,10 +15,3 @@ class TherapyPatient(Patient):
 
     def __lt__(self, nxt):
         return self.therapy_time < nxt.therapy_time
-
-    def clone_and_generate(self):
-        return_value = TherapyPatient(self.id, self.therapy_generator)
-
-        return_value.generate_therapy()
-
-        return return_value

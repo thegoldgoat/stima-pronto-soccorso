@@ -4,7 +4,9 @@ import logging
 from threading import Lock
 from typing import Dict, List
 from src.simulator.generators.exponential_generator_time_variant import ExponentialGeneratorTimeVariant
+from src.simulator.generators.therapy_time_from_samples_generator import TherapyTimeFromSampleGenerator
 
+import math
 from src.simulator.simulator import Simulator
 from src.common.therapy_patient import TherapyPatient
 from src.common.Queue.therapy_queue import TherapyQueue
@@ -73,9 +75,11 @@ class SimulationManager:
 
         therapy_queue = TherapyQueue(THERAPY_SIZE)
         
-        for therapy_patient in self._initial_therapy_patients_list:
+        # Generate the therapy time for patients already in therapy to keep track of time they have already spent in therapy
+        for therapy_patient in self._initial_therapy_patients_list: # list of Patient
             therapy_queue.push(TherapyPatient(therapy_patient.id,
-                                              therapy_patient.therapy_generator
+                                              therapy_patient.therapy_generator,
+                                              self.generate_therapy_patient_for_patient_already_in_therapy(therapy_patient.therapy_generator, current_datetime, therapy_patient.arrival_time)
                                               ))
         
         copy_of_current_datetime = self._clone_current_datetime(current_datetime)
@@ -128,3 +132,8 @@ class SimulationManager:
                     time)] = occurrence/self._simulation_count
             EsteemModel(simulation_id=simulation, patient_id=patient_id,
                         waiting_times=normalized_waiting_times).save()
+
+    def generate_therapy_patient_for_patient_already_in_therapy(self, therapy_time_generator: TherapyTimeFromSampleGenerator, current_datetime: datetime, entry_time_in_therapy: datetime):
+        minutes_spent = math.floor((current_datetime - entry_time_in_therapy).seconds/60)
+        return therapy_time_generator.generate_sample_with_minimum_value(minutes_spent) - minutes_spent
+    

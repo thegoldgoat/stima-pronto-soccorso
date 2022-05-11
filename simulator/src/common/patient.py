@@ -16,8 +16,7 @@ class Patient():
         self.leave_time = self.leave_generator.generate_sample()
 
     def generate_therapy(self):
-        # TODO Generate time (limited to greater than time already spent in therapy)
-        self.therapy_time = self.therapy_generator.generate_sample() # - time already spent in therapy
+        self.therapy_time = self.therapy_generator.generate_sample()
        
     def generate_all(self):
         self.generate_leave()

@@ -24,7 +24,7 @@ import math
 
 logger = createLogginWithName('Main', logging.INFO)
 
-N = 100
+N = 100000
 NUM_OF_MONTHS = 12
 NUM_OF_MONTHS_DATABASE = 40
 NUM_OF_DAYS_IN_WEEK = 7
@@ -33,10 +33,6 @@ MINUTES_IN_HOUR_BIN = 240
 START_DATE_DATABASE = datetime(2014, 3, 1)
 END_DATE_DATABASE = datetime(2017, 7, 1)
 
-
-def normalizeTime(time: datetime):
-    delta = time - datetime.now()
-    return math.ceil(delta.total_seconds()/60)
 
 def from_hour_bin_to_starting_and_ending_hours(hour_bin: str):
     '''
@@ -151,7 +147,7 @@ def main():
                 # TODO get from db when implemented in the model
                 ExponentialGenerator(1),
                 waiting_patient.emergency_code,
-                normalizeTime(waiting_patient.arrival_time)
+                waiting_patient.arrival_time
             )
         )
 
@@ -169,7 +165,7 @@ def main():
                 # TODO get from db when implemented in the model
                 ExponentialGenerator(1),
                 None,
-                normalizeTime(therapy_patient.entry_time)
+                therapy_patient.entry_time
             )
         )
 
