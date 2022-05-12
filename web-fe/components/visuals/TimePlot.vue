@@ -4,6 +4,7 @@
     gradient-direction="top"
     smooth="10"
     line-width="2"
+    fill
     :gradient="['#f72047', '#ffd200', '#1feaea']"
   >
     <template v-slot:label="item">
