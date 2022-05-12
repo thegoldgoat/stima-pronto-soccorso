@@ -5,11 +5,11 @@ from src.common.Models.waiting_patient_model import WaitingPatientModel
 from src.common.Models.therapy_patient_model import TherapyPatientModel
 from src.common.EsiCodes import esi_constants
 
-num_of_waiting_patients = 3
+num_of_waiting_patients = [1,2,3,3,3]
 
 def insertPatients():
     for esi in esi_constants.ESI_CODES:
-        for i in range(0, num_of_waiting_patients):
+        for i in range(0, num_of_waiting_patients[esi-1]):
             patient = PatientModel().save()
             WaitingPatientModel(
                 patient_id=patient,
