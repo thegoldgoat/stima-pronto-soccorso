@@ -7,7 +7,7 @@
           <v-skeleton-loader :loading="isLoading" height="300" type="card">
             <v-expansion-panels>
               <v-expansion-panel
-                v-for="patientEsteem in esteemsForGraphs"
+                v-for="patientEsteem in esteems"
                 :key="patientEsteem.patient_id"
               >
                 <v-expansion-panel-header>
@@ -44,62 +44,6 @@ type EsteemFromMonitor = PatientEsteem & { patient_id: string }
 export default class DisplayPage extends Vue {
   isLoading = true
   esteems: EsteemFromMonitor[] = []
-
-  /*
-   * Since the esteems from the rest API come with "holes" in the horizontal axis,
-   * e.g. {0: 0.5, 2: 0.5} we do a linear interpolation to fill these holes, so that
-   * the Vuetify Plotting component can plot that correctly
-   */
-  get esteemsForGraphs(): EsteemFromMonitor[] {
-    return this.esteems.map((esteem): EsteemFromMonitor => {
-      const new_wait_times: number[] = []
-      const new_amount_times: number[] = []
-
-      const wait_times = Object.keys(esteem.waiting_times)
-      const amount_times = Object.values(esteem.waiting_times)
-      for (let j = 0; j < wait_times.length; j++) {
-        const wait_time = wait_times[j]
-        const amount = amount_times[j]
-
-        const wait_time_int = parseInt(wait_time)
-        if (new_wait_times.length == 0) {
-          new_wait_times.push(wait_time_int)
-          new_amount_times.push(amount)
-          continue
-        }
-
-        let diff
-        if (
-          (diff =
-            wait_time_int - new_wait_times[new_wait_times.length - 1] - 1) != 0
-        ) {
-          const last_amount = new_amount_times[new_amount_times.length - 1]
-          // m as in y = mx + q aka dy/dx
-          const m = (last_amount - amount) / (diff + 1)
-
-          for (let i = 1; i <= diff; i++) {
-            new_wait_times.push(wait_time_int - i)
-            new_amount_times.push(amount + m * i)
-          }
-        }
-
-        new_wait_times.push(wait_time_int)
-        new_amount_times.push(amount)
-      }
-
-      const new_waiting_times: Map<string, number> = new Map()
-      for (let i = 0; i < new_wait_times.length; i++) {
-        new_waiting_times.set(new_wait_times[i].toString(), new_amount_times[i])
-      }
-
-      return {
-        waiting_times: Object.fromEntries(new_waiting_times),
-        patient_id: esteem.patient_id,
-        emergency_code: esteem.emergency_code,
-        arrival_time: esteem.arrival_time,
-      } as any
-    })
-  }
 
   async updateDisplay() {
     this.isLoading = true
