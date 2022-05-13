@@ -9,7 +9,11 @@
     :gradient="['#f72047', '#ffd200', '#1feaea']"
   >
     <template v-slot:label="item">
-      {{ item.index % labelToPlotCount == 0 ? labels[item.index] : '' }}
+      {{
+        item.index % labelToPlotCount == 0
+          ? computedProps.labels[item.index]
+          : ''
+      }}
     </template>
   </v-sparkline>
 </template>
@@ -23,7 +27,7 @@ export default class TimePlot extends Vue {
   @Prop({ type: Array, required: true }) value!: []
 
   get totalLabels() {
-    return this.labels.length
+    return this.computedProps.labels.length
   }
 
   get labelToPlotCount() {
