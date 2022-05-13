@@ -1,14 +1,16 @@
 import { Schema, model, ObjectId } from 'mongoose'
 
-interface Esteem {
+export type WaitingTimesType = Map<string, number>
+
+export interface Esteem {
   patient_id: ObjectId
 
   simulation_id: ObjectId
 
-  waiting_times: Map<string, number>
+  waiting_times: WaitingTimesType
 }
 
-const esteemSchema = new Schema<Esteem>(
+export const esteemSchema = new Schema<Esteem>(
   {
     patient_id: {
       type: Schema.Types.ObjectId,
@@ -31,6 +33,4 @@ const esteemSchema = new Schema<Esteem>(
   }
 )
 
-const esteemModel = model('esteem', esteemSchema)
-
-export { esteemSchema, esteemModel, Esteem }
+export const esteemModel = model('esteem', esteemSchema)
